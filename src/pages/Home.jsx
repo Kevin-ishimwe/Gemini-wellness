@@ -1,11 +1,12 @@
 import vwaves from "../assets/Vectorwave.svg";
 import hero_2_photo from "../assets/hero2.png";
 import Hero from "../components/Hero";
+import Faqs from "../components/Faqs";
 
 const SubHero = () => {
   return (
     <div className="relative z-[10] ">
-      <div className="relative bg-indigo-600 min-h-fit mx-auto text-white flex flex-col justify-center p-20 hero-2">
+      <div className="relative bg-indigo-600 min-h-[80vh]mx-auto text-white flex flex-col justify-center p-20 hero-2">
         <div className="w-8/12">
           <h2 className="text-[4em] font-bold mb-4">
             Introducing Gemini Wellness
@@ -29,12 +30,12 @@ const SubHero = () => {
           </button>
         </div>
         <img
-          className="h-[25em] w-[45em] object-cover absolute right-2 bottom-[-15em] z-[5]"
+          className="w-[35em] object-cover absolute right-2 bottom-[1x0vh] z-[5]"
           src={hero_2_photo}
           alt=""
         />
       </div>
-      <img src={vwaves} alt="" className="upside w-screen absolute left-0 " />
+      <img src={vwaves} alt="" className="upside w-screen bottom-[-10em] absolute left-0 " />
     </div>
   );
 };
@@ -45,7 +46,7 @@ function Home() {
       <div className="bg-gray-100 ">
         <Hero />
         <SubHero />
-        <div className="min-h-screen"></div>
+        <Faqs />
       </div>
     </>
   );
