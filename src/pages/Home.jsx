@@ -2,6 +2,7 @@ import vwaves from "../assets/Vectorwave.svg";
 import hero_2_photo from "../assets/hero2.png";
 import Hero from "../components/Hero";
 import Faqs from "../components/Faqs";
+import WhyGemini from "../components/Why"
 
 const SubHero = () => {
   return (
@@ -47,6 +48,7 @@ function Home() {
         <Hero />
         <SubHero />
         <Faqs />
+        <WhyGemini/>
       </div>
     </>
   );

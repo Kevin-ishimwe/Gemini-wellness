@@ -50,6 +50,9 @@ body {
   animation: name duration timing-function delay iteration-count direction
     fill-mode;
 }
+.flip{
+  transform: scale(-1,1);
+}
 @keyframes happear {
   from {
     height: 0em;

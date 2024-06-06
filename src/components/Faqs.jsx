@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa6";
+import vwaves from "../assets/Vectorwave.svg";
 
 const qas = [
   {
@@ -45,7 +46,7 @@ const Faqs = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center pt-[15em]">
+    <div className=" relative min-h-screen flex flex-col items-center justify-center pt-[15em]">
       <h1 className="font-bold text-4xl mb-12 text-[#252625]">
         Frequently asked questions
       </h1>
@@ -62,11 +63,20 @@ const Faqs = () => {
               />
             </div>
             {expanded[question] && (
-              <p className="anim-1 text-[#4a4d4a] text-md py-1 font-light">{answer}</p>
+              <p className="anim-1 text-[#4a4d4a] text-md py-1 font-light">
+                {answer}
+              </p>
             )}
           </div>
         ))}
       </div>
+      <h1 className="underline my-4 font-bold text-indigo-700">
+        ask a question ?
+      </h1>
+      <button className="bg-indigo-700 py-4 px-6 rounded-full text-white ">
+        Get started
+      </button>
+      <img src={vwaves} className="flip w-screen" />
     </div>
   );
 };
