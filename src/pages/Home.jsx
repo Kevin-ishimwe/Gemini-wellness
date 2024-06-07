@@ -2,15 +2,16 @@ import vwaves from "../assets/Vectorwave.svg";
 import hero_2_photo from "../assets/hero2.png";
 import Hero from "../components/Hero";
 import Faqs from "../components/Faqs";
-import WhyGemini from "../components/Why"
+import WhyGemini from "../components/Why";
+import Footer from "../components/Footer";
 
 const SubHero = () => {
   return (
     <div className="relative z-[10] ">
-      <div className="relative bg-indigo-600 min-h-[80vh]mx-auto text-white flex flex-col justify-center p-20 hero-2">
-        <div className="w-8/12">
+      <div className="flex relative bg-indigo-600 mx-auto text-white justify-center p-20 hero-2">
+        <div className="w-6/12">
           <h2 className="text-[4em] font-bold mb-4">
-            Introducing Gemini Wellness
+            Introducing <br></br>Gemini Wellness
           </h2>
           <p className=" mb-8 ">
             At Gemini Wellness, we understand the intricate connection between
@@ -30,13 +31,26 @@ const SubHero = () => {
             Explore Features
           </button>
         </div>
-        <img
-          className="w-[35em] object-cover absolute right-2 bottom-[1x0vh] z-[5]"
-          src={hero_2_photo}
-          alt=""
-        />
+        <div className="flex flex-col">
+          <img
+            src="https://dy7glz37jgl0b.cloudfront.net/advice/images/341c509086ff5067842a0d7027315868-girl-holding-mug-smiling-by-computer_l.jpg"
+            alt=""
+            className="hover:scale-105  object-cover w-[20em] h-[25em] rounded-bl-[100px] rounded-[30px] border-[3px] border-white "
+          />
+
+          <img
+            className="hover:scale-105 my-4  object-cover w-[35em] h-[20em] rounded-bl-[100px] rounded-[30px] border-[3px] border-white "
+            src="https://dy7glz37jgl0b.cloudfront.net/advice/images/297dfb7a92111b7dab757eda16fe1a8a-man-types-on-his-laptop-while-wearing-headphones-at-a-desk_l.jpg"
+            alt=""
+          />
+        </div>
+        <div></div>
       </div>
-      <img src={vwaves} alt="" className="upside w-screen bottom-[-10em] absolute left-0 " />
+      <img
+        src={vwaves}
+        alt=""
+        className="upside w-screen bottom-[-10em] absolute left-0 z-[-10]"
+      />
     </div>
   );
 };
@@ -48,7 +62,8 @@ function Home() {
         <Hero />
         <SubHero />
         <Faqs />
-        <WhyGemini/>
+        <WhyGemini />
+        <Footer />
       </div>
     </>
   );

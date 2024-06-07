@@ -39,8 +39,8 @@ const Hero = () => {
                 alt=""
                 className="hover:scale-105  object-cover w-[20em]  rounded-[30px] rounded-bl-[30px] rounded-tr-[100px] border-[1px] border-indigo-500 ml-4"
               />
-              <div className=" absolute bg-[#928CFF] -top-[5em] left-8 -rotate-45 h-[7em] w-[3em] rounded-[200px]"></div>
-              <div className="t1 absolute bg-[#2C97DE] -top-[10em] right-0 -rotate-45 h-[10em] w-[5em] "></div>
+              <div className="hover:scale-105 hover:translate-x-8 absolute bg-[#928CFF] -top-[5em] left-8 -rotate-45 h-[7em] w-[3em] rounded-[200px]"></div>
+              <div className="t1 absolute hover:scale-105 hover:translate-y-8 bg-[#2C97DE] -top-[10em] right-0 -rotate-45 h-[10em] w-[5em] "></div>
             </div>
           </div>
           <div className="relative flex gap-4">
@@ -50,7 +50,7 @@ const Hero = () => {
                 alt=""
                 className="hover:scale-105  object-cover w-[20em] rounded-[30px] rounded-bl-[100px] border-[1px] border-indigo-500 ml-4"
               />
-              <div className="hover:scale-110 c1 absolute bg-[#F8E26C] -top-[5em] rotate-45 h-[10em] w-[5em] "></div>
+              <div className="hover:scale-110 hover:translate-y-4 c1 absolute bg-[#F8E26C] -top-[5em] rotate-45 h-[10em] w-[5em] "></div>
             </div>
             <img
               src={dude_phone}

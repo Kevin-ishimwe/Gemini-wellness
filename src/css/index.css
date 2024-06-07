@@ -6,6 +6,11 @@
   font-family: "PoppinsLight";
   src: url("../fonts/Poppins/Poppins-Light.ttf") format("truetype");
 }
+@font-face {
+  font-family: "PoppinsMedium";
+  src: url("../fonts/Poppins/Poppins-Medium.ttf") format("truetype");
+}
+
 .c1 {
   clip-path: circle(50% at 0 50%);
 }
@@ -16,12 +21,6 @@
   transform: rotate(180deg);
 }
 
-/* img:hover {
-  transition: 1s all;
-  transform: scale(1.05);
-  transform-origin: 40%;
-  z-index: 100;
-} */
 
 body {
   background-color: #f9f9f9;
@@ -32,11 +31,14 @@ body {
   color: rgba(31, 1, 70, 0.854);
 }
 * {
+
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 350ms;
+  transition-duration: 150ms;
 }
-
+p{
+    font-family: "PoppinsLight";
+}
 .linear_text_1 {
   background: linear-gradient(to right, #9068bf, #1ba0e3);
   -webkit-background-clip: text;
@@ -62,4 +64,9 @@ body {
     height: fit-content;
     opacity: 1;
   }
+}
+
+
+a:hover{
+  scale: 1.05;
 }

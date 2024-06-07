@@ -52,11 +52,14 @@ const Faqs = () => {
       </h1>
       <div className="w-[70vw] border-b-2">
         {qas.map(({ question, answer }) => (
-          <div key={question}>
+          <div
+            key={question}
+            onClick={() => toggleExpand(question)}
+            className="hover:text-[#4F46E5] transition-all"
+          >
             <div className="py-3 border-t-[1px] border-[#C3C8C1] my-[1px] w-full flex items-center justify-between pr-2">
               <h4 className="text-lg">{question}</h4>
               <FaChevronDown
-                onClick={() => toggleExpand(question)}
                 className={`transform  duration-[.8s] hover:scale-110 hover:text-indigo-700 ${
                   expanded[question] ? "rotate-180" : ""
                 }`}
