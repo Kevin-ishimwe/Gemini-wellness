@@ -5,9 +5,7 @@ function NotFound() {
   return (
     <div className="">
       <div className="flex flex-col justify-center items-center min-h-screen">
-        <Logo_max />
-
-        <h1 className="text-4xl font-bold my-4 text-indigo-400">
+        <h1 className="text-4xl  my-4 text-indigo-600">
           Page not found
         </h1>
         <img src={not_found} alt="" className="w-[20em]" />

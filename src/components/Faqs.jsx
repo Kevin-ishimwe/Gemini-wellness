@@ -47,10 +47,10 @@ const Faqs = () => {
 
   return (
     <div className=" relative min-h-screen flex flex-col items-center justify-center pt-[15em]">
-      <h1 className="font-bold text-4xl mb-12 text-[#252625]">
+      <h1 className="text-2xl font-bold lg:text-4xl mb-12 text-[#252625]">
         Frequently asked questions
       </h1>
-      <div className="w-[70vw] border-b-2">
+      <div className="w-10/12 md:w-[70vw] border-b-2">
         {qas.map(({ question, answer }) => (
           <div
             key={question}

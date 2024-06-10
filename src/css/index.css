@@ -20,6 +20,9 @@
 .upside {
   transform: rotate(180deg);
 }
+.st1{
+ clip-path: polygon(20% 0%, 57% 89%, 39% 0, 16% 48%, 18% 79%, 20% 100%, 38% 51%, 0% 20%);
+}
 
 
 body {
@@ -45,6 +48,11 @@ p{
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+  white-space: nowrap;
+}
+.blur3{
+  backdrop-filter: blur(30px);
+  background-color: rgba(255, 255, 255, 0.648);
 }
 
 .anim-1 {

@@ -1,16 +1,14 @@
 import vwaves from "../assets/Vectorwave.svg";
-import hero_2_photo from "../assets/hero2.png";
 import Hero from "../components/Hero";
 import Faqs from "../components/Faqs";
 import WhyGemini from "../components/Why";
-import Footer from "../components/Footer";
 
 const SubHero = () => {
   return (
     <div className="relative z-[10] ">
-      <div className="flex relative bg-indigo-600 mx-auto text-white justify-center p-20 hero-2">
-        <div className="w-6/12">
-          <h2 className="text-[4em] font-bold mb-4">
+      <div className="lg:flex relative bg-indigo-600 lg:mx-auto text-white justify-between items-center p-6 lg:p-20 hero-2">
+        <div className="lg:w-6/12 text-center lg:text-left">
+          <h2 className="text-4xl lg:text-[4em] leading-[1.7em] font-bold mb-4">
             Introducing <br></br>Gemini Wellness
           </h2>
           <p className=" mb-8 ">
@@ -27,29 +25,40 @@ const SubHero = () => {
             tracking, and mindfulness practices, our holistic approach ensures a
             seamless journey towards optimal wellness.
           </p>
-          <button className="bg-white text-indigo-600 py-2 px-4 rounded-md hover:scale-110 w-fit">
+          <button className=" bg-white text-indigo-600 py-2 px-4 rounded-lg hover:scale-110 w-fit">
             Explore Features
           </button>
         </div>
-        <div className="flex flex-col">
-          <img
-            src="https://dy7glz37jgl0b.cloudfront.net/advice/images/341c509086ff5067842a0d7027315868-girl-holding-mug-smiling-by-computer_l.jpg"
-            alt=""
-            className="hover:scale-105  object-cover w-[20em] h-[25em] rounded-bl-[100px] rounded-[30px] border-[3px] border-white "
-          />
-
-          <img
-            className="hover:scale-105 my-4  object-cover w-[35em] h-[20em] rounded-bl-[100px] rounded-[30px] border-[3px] border-white "
-            src="https://dy7glz37jgl0b.cloudfront.net/advice/images/297dfb7a92111b7dab757eda16fe1a8a-man-types-on-his-laptop-while-wearing-headphones-at-a-desk_l.jpg"
-            alt=""
-          />
+        <div className="flex flex-col justify-end lg:w-[40em] gap-2 lg:gap-4 mt-4 overflow-hidden ">
+          <div className="flex gap-2 lg:gap-4 ">
+            <img
+              src="https://dy7glz37jgl0b.cloudfront.net/advice/images/341c509086ff5067842a0d7027315868-girl-holding-mug-smiling-by-computer_l.jpg"
+              alt=""
+              className="lg:hover:scale-105  object-cover w-[45%] h-[15em]  lg:w-[20em]  lg:h-[25em] rounded-l-[100px] rounded-[30px] border-[3px] border-white "
+            />
+            <img
+              src="https://dy7glz37jgl0b.cloudfront.net/advice/images/ee27b7980e4f81e46bd25482cffbd6c2-man-looks-past-his-laptop-in-an-office-setting_l.jpeg"
+              alt=""
+              className="lg:hover:scale-105  object-cover w-[45%] h-[15em]  lg:w-[100%]  lg:h-[25em]  rounded-r-[100px] rounded-[30px] border-[3px] border-white "
+            />
+          </div>
+          <div className="relative">
+            <img
+              className="lg:hover:scale-105  object-cover w-full h-[15em] md:h-[20em] lg:h-[20em] rounded-b-[100px] rounded-[30px] border-[3px] border-white "
+              src="https://dy7glz37jgl0b.cloudfront.net/advice/images/297dfb7a92111b7dab757eda16fe1a8a-man-types-on-his-laptop-while-wearing-headphones-at-a-desk_l.jpg"
+              alt=""
+            />
+            <div className="hover:scale-105 hover:translate-x-8 absolute bg-[#a5da20] -top-[5em] left-8 -rotate-45 h-[7em] w-[3em] rounded-[200px]"></div>
+            <div className="t1 absolute hover:scale-105 hover:translate-y-8 bg-[#e93a66] -top-[5em] left-[80%] lg:-right-12 -rotate-30 h-[5em] w-[7em] "></div>
+            <div className=" absolute hover:scale-105 hover:translate-y-8 bg-[#ce3fb6] top-[30%] right-[1%] -rotate-45 h-[2em] w-[5em] z-5"></div>
+          </div>
         </div>
         <div></div>
       </div>
       <img
         src={vwaves}
         alt=""
-        className="upside w-screen bottom-[-10em] absolute left-0 z-[-10]"
+        className="upside w-screen bottom-[-5em] lg:bottom-[-15em] absolute left-0 z-[-10]"
       />
     </div>
   );
@@ -58,13 +67,10 @@ const SubHero = () => {
 function Home() {
   return (
     <>
-      <div className="bg-gray-100 ">
-        <Hero />
-        <SubHero />
-        <Faqs />
-        <WhyGemini />
-        <Footer />
-      </div>
+      <Hero />
+      <SubHero />
+      <Faqs />
+      <WhyGemini />
     </>
   );
 }

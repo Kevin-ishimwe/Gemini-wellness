@@ -2,16 +2,13 @@ import { NavLink } from "react-router-dom";
 function Footer() {
   const links = [
     { text: "Home", link: "/home" },
-    { text: "Business", link: "/business" },
     { text: "About", link: "/about" },
     { text: "FAQ", link: "/faq" },
     { text: "Reviews", link: "/reviews" },
     { text: "Advice", link: "/advice" },
     { text: "Careers", link: "/careers" },
-    { text: "Find a Therapist", link: "/find-therapist" },
-    { text: "Online Therapy", link: "/online-therapy" },
+    { text: "Therapy", link: "/therapy" },
     { text: "Contact", link: "/contact" },
-    { text: "For Therapists", link: "/for-therapists" },
     
   ];
   const links2 = [

@@ -46,7 +46,7 @@ function WhyGemini() {
   return (
     <div className="py-12 bg-indigo-600 text-center">
       <h1 className="text-[3em] font-bold text-white ">Why Gemini Wellness?</h1>
-      <div className="grid grid-cols-3 justify-evenly px-[2%] gap-2 ">
+      <div className="flex flex-col md:grid grid-cols-3 justify-evenly px-[2%] gap-2 ">
         {whyGeminiWellness.map(({ icon, title, description }, index) => (
           <div key={index} className="text-white text-left my-4rounded-[1em] p-12">
             {icon}
