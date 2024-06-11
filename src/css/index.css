@@ -10,7 +10,9 @@
   font-family: "PoppinsMedium";
   src: url("../fonts/Poppins/Poppins-Medium.ttf") format("truetype");
 }
-
+.linear-bg {
+  background: linear-gradient(90deg,#9068BF,#1BA0E3);
+}
 .c1 {
   clip-path: circle(50% at 0 50%);
 }
