@@ -2,6 +2,7 @@ import Logo_max from "./Logo-max";
 import { NavLink } from "react-router-dom";
 import { HiMiniBars3 } from "react-icons/hi2";
 import { RxCross1 } from "react-icons/rx";
+
 import { useState } from "react";
 function Nav() {
   const [menu, setmenu] = useState(false);

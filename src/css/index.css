@@ -6,10 +6,12 @@
   font-family: "PoppinsLight";
   src: url("../fonts/Poppins/Poppins-Light.ttf") format("truetype");
 }
+
 @font-face {
   font-family: "PoppinsMedium";
   src: url("../fonts/Poppins/Poppins-Medium.ttf") format("truetype");
 }
+
 .linear-bg {
   background: linear-gradient(90deg,#9068BF,#1BA0E3);
 }
