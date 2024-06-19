@@ -4,33 +4,44 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FaMicrophone } from "react-icons/fa";
 import Logo_max from "../components/Logo-max";
 
-const apicall = async (transcribedText) => {
-  // Call the chat completion API
-  const chatResponse = await fetch(
-    "https://api.openai.com/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer `,
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a professional therapist named Gemmi. Talk to the user in a calm manner and try to help them resolve their emotional strife.",
-          },
-          { role: "user", content: transcribedText },
-        ],
-      }),
-    }
-  );
+const key1 = import.meta.env.VITE_OPENAI_API_KEY;
 
-  const chatCompletion = await chatResponse.json();
-  const message = chatCompletion.choices[0].message.content;
-  const textchunks = message.split(".");
+const generative_completion = async (prompt, api_key) => {
+  try {
+    // Call the chat completion API
+    const chatResponse = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${api_key}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are a professional therapist named Gemmi. Talk to the user in a calm manner and try to help them resolve their emotional strife.",
+            },
+            { role: "user", content: prompt },
+          ],
+        }),
+      }
+    );
+
+    const chatCompletion = await chatResponse.json();
+    const message = chatCompletion.choices[0].message.content;
+    return message;
+  } catch (err) {
+    console.log("generative completion failed ");
+  }
+};
+
+const apicall = async (transcribedText) => {
+  const generative_text = await generative_completion(transcribedText, key1);
+  const textchunks = generative_text.split(".");
 
   // Function to play audio chunks sequentially
   const playAudioChunks = async (chunks, index = 0) => {
@@ -39,7 +50,7 @@ const apicall = async (transcribedText) => {
     const ttsResponse = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
       headers: {
-        Authorization: `Bearer `,
+        Authorization: `Bearer ${key1}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -68,11 +79,10 @@ const apicall = async (transcribedText) => {
 
     audioElement.play();
   };
-
   // Start playing the audio chunks
   playAudioChunks(textchunks);
 
-  return { chatCompletion };
+  return { generative_text };
 };
 
 const handleTranscription = async (audioBlob) => {
@@ -84,12 +94,13 @@ const handleTranscription = async (audioBlob) => {
   formData.append("model", "whisper-1");
 
   try {
+    console.log(key1);
     const response = await fetch(
       "https://api.openai.com/v1/audio/transcriptions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer `,
+          Authorization: `Bearer ${key1}`,
         },
         body: formData,
       }
@@ -109,7 +120,6 @@ function VoiceTherapy() {
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
   // transcribed text
-
   useEffect(() => {
     if (recording && mediaRecorder) {
       mediaRecorder.start();

@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import VoiceTherapy from "./pages/VoiceTherapy";
+import GetStarted from "./pages/GetStarted";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             }
           />
           <Route path="/therapy/voice" element={<VoiceTherapy />} />
+          <Route path="/getstarted" element={<GetStarted />} />
         </Routes>
       </Router>
     </>

@@ -38,9 +38,12 @@ function Nav() {
             >
               Login
             </NavLink>
-            <button className=" mt-4  lg:mt-0 bg-indigo-600 text-white py-2 px-8 mx-2 rounded-full hover:bg-indigo-800 border-2 border-indigo-600">
+            <NavLink
+              to={"/getstarted"}
+              className=" mt-4  lg:mt-0 bg-indigo-600 text-white py-2 px-8 mx-2 rounded-full hover:bg-indigo-800 border-2 border-indigo-600"
+            >
               Get Started
-            </button>
+            </NavLink>
           </div>
         </div>
         {/* mobile */}
@@ -73,13 +76,16 @@ function Nav() {
         <div className="flex-col flex lg:flex-row lg:items-center mt-4  lg:mt-0">
           <NavLink
             to={"/login"}
-            className="ml-4 border-2 border-indigo-600 py-2 px-8 mx-2 rounded-full text-indigo-600 hover:bg-indigo-100  "
+            className="ml-4 border-2 text-center border-indigo-600 py-2 px-8 mx-2 rounded-full text-indigo-600 hover:bg-indigo-100  "
           >
             Login
           </NavLink>
-          <button className=" mt-4  lg:mt-0 bg-indigo-600 text-white py-2 px-8 mx-2 rounded-full hover:bg-indigo-800 border-2 border-indigo-600">
+          <NavLink
+            to={"/getstarted"}
+            className=" mt-4  text-center lg:mt-0 bg-indigo-600 text-white py-2 px-8 mx-2 rounded-full hover:bg-indigo-800 border-2 border-indigo-600"
+          >
             Get Started
-          </button>
+          </NavLink>
         </div>
       </div>
     </>
