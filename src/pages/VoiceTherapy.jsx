@@ -3,6 +3,7 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaMicrophone } from "react-icons/fa";
 import Logo_max from "../components/Logo-max";
+import { GenerativeModel } from "@google/generative-ai";
 
 const key1 = import.meta.env.VITE_OPENAI_API_KEY;
 
