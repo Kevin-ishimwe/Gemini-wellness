@@ -82,3 +82,16 @@ p{
 a:hover{
   scale: 1.05;
 }
+.visualizer-container {
+width: 70vw;
+  height: 1vh; 
+  background: linear-gradient(90deg,#9068BF,#1BA0E3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.visualizer-bar {
+  background: rgba(255, 255, 255, 0.8);
+  transition: height 0.1s ease; /* Smooth transition for the height */
+  border-radius: 100px;
+}

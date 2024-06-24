@@ -3,45 +3,51 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaMicrophone } from "react-icons/fa";
 import Logo_max from "../components/Logo-max";
-import { GenerativeModel } from "@google/generative-ai";
+import AudioVisualizer from "../components/AudioVisualizer";
 
 const key1 = import.meta.env.VITE_OPENAI_API_KEY;
 
-const generative_completion = async (prompt, api_key) => {
+const generative_completion = async (prompt) => {
   try {
     // Call the chat completion API
-    const chatResponse = await fetch(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${api_key}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a professional therapist named Gemmi. Talk to the user in a calm manner and try to help them resolve their emotional strife.",
-            },
-            { role: "user", content: prompt },
-          ],
-        }),
-      }
-    );
-
-    const chatCompletion = await chatResponse.json();
-    const message = chatCompletion.choices[0].message.content;
-    return message;
+    const chatResponse = await fetch("http://localhost:2020/conversation", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        history: [],
+      }),
+    }).then((res) => res.json());
+    const modelResponse = chatResponse.response;
+    updateChatHistory(prompt, modelResponse);
+    return modelResponse;
   } catch (err) {
     console.log("generative completion failed ");
   }
 };
 
+function updateChatHistory(userPrompt, modelResponse) {
+  const storageKey = "ChatHistory";
+  let chatHistory = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+  const userEntry = {
+    role: "user",
+    parts: [{ text: userPrompt }],
+  };
+
+  const modelEntry = {
+    role: "model",
+    parts: [{ text: modelResponse }],
+  };
+  chatHistory.push(userEntry, modelEntry);
+  localStorage.setItem(storageKey, JSON.stringify(chatHistory));
+}
+
 const apicall = async (transcribedText) => {
-  const generative_text = await generative_completion(transcribedText, key1);
+  const generative_text = await generative_completion(transcribedText);
   const textchunks = generative_text.split(".");
 
   // Function to play audio chunks sequentially
@@ -121,6 +127,7 @@ function VoiceTherapy() {
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
   // transcribed text
+
   useEffect(() => {
     if (recording && mediaRecorder) {
       mediaRecorder.start();
@@ -173,9 +180,10 @@ function VoiceTherapy() {
       <div>
         <Logo_max orientation={true} />
       </div>
-      <div className="linear-bg h-[.3em] w-[80vw] left-[10vw] absolute top-[70vh] rounded-full">
+      <div className=" absolute top-[70vh] bg-red-400 mx-auto grid w-full justify-center">
+        <AudioVisualizer />
         <FaMicrophone
-          className={`mx-auto mt-12 text-4xl text-indigo-800 h-[2em] w-[2em] py-4 rounded-full bg-white shadow-lg 
+          className={`mx-auto mt-12 text-4xl text-indigo-800 h-[2em] w-[2em] py-4 rounded-full bg-white shadow-lg
           ${
             recording
               ? "text-red-600"
