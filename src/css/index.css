@@ -13,7 +13,7 @@
 }
 
 .linear-bg {
-  background: linear-gradient(90deg,#9068BF,#1BA0E3);
+  background: linear-gradient(90deg, #9068bf, #1ba0e3);
 }
 .c1 {
   clip-path: circle(50% at 0 50%);
@@ -24,10 +24,18 @@
 .upside {
   transform: rotate(180deg);
 }
-.st1{
- clip-path: polygon(20% 0%, 57% 89%, 39% 0, 16% 48%, 18% 79%, 20% 100%, 38% 51%, 0% 20%);
+.st1 {
+  clip-path: polygon(
+    20% 0%,
+    57% 89%,
+    39% 0,
+    16% 48%,
+    18% 79%,
+    20% 100%,
+    38% 51%,
+    0% 20%
+  );
 }
-
 
 body {
   background-color: #f9f9f9;
@@ -38,13 +46,12 @@ body {
   color: rgba(31, 1, 70, 0.854);
 }
 * {
-
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
-p{
-    font-family: "PoppinsLight";
+p {
+  font-family: "PoppinsLight";
 }
 .linear_text_1 {
   background: linear-gradient(to right, #9068bf, #1ba0e3);
@@ -54,7 +61,7 @@ p{
   color: transparent;
   white-space: nowrap;
 }
-.blur3{
+.blur3 {
   backdrop-filter: blur(30px);
   background-color: rgba(255, 255, 255, 0.648);
 }
@@ -64,8 +71,8 @@ p{
   animation: name duration timing-function delay iteration-count direction
     fill-mode;
 }
-.flip{
-  transform: scale(-1,1);
+.flip {
+  transform: scale(-1, 1);
 }
 @keyframes happear {
   from {
@@ -78,20 +85,32 @@ p{
   }
 }
 
-
-a:hover{
+a:hover {
   scale: 1.05;
 }
-.visualizer-container {
-width: 70vw;
-  height: 1vh; 
-  background: linear-gradient(90deg,#9068BF,#1BA0E3);
-  border-radius: 10px;
+
+.text-overlay-container {
+  position: relative;
   overflow: hidden;
 }
 
-.visualizer-bar {
-  background: rgba(255, 255, 255, 0.8);
-  transition: height 0.1s ease; /* Smooth transition for the height */
-  border-radius: 100px;
+.overlay-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(255, 255, 255); /* Text color */
+  padding: 1em;
+  text-align: center; /* Center the text */
+  opacity: 0; /* Initially hidden */ /* Smooth transition */
+/* Slide up from bottom */
+}
+
+.text-overlay-container:hover .overlay-text {
+  opacity: 1; /* Fully visible on hover */
+  transform: translateY(0); /* Slide to its original position */
 }

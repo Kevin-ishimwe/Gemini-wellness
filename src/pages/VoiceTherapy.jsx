@@ -148,10 +148,6 @@ function VoiceTherapy() {
     if (!recording && audioChunks.length > 0) {
       const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
       handleTranscription(audioBlob);
-
-      //   const audioUrl = URL.createObjectURL(audioBlob);
-      //   const audio = new Audio(audioUrl);
-      //   audio.play();
       setAudioChunks([]);
     }
   }, [recording, audioChunks]);
@@ -180,8 +176,8 @@ function VoiceTherapy() {
       <div>
         <Logo_max orientation={true} />
       </div>
-      <div className=" absolute top-[70vh] bg-red-400 mx-auto grid w-full justify-center">
-        <AudioVisualizer />
+      <div className=" absolute top-[40vh] mx-auto grid w-full justify-center ">
+        <AudioVisualizer voice={recording} />
         <FaMicrophone
           className={`mx-auto mt-12 text-4xl text-indigo-800 h-[2em] w-[2em] py-4 rounded-full bg-white shadow-lg
           ${
@@ -189,7 +185,9 @@ function VoiceTherapy() {
               ? "text-red-600"
               : "hover:text-indigo-600 hover:scale-[1.02]"
           }`}
-          onClick={handleRecord}
+          onClick={() => {
+            setRecording(!recording);
+          }}
         />
       </div>
     </div>
