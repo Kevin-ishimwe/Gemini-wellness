@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import VoiceTherapy from "./pages/VoiceTherapy";
 import GetStarted from "./pages/GetStarted";
 
+
 function App() {
   return (
     <>

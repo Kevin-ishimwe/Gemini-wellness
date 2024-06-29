@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "@react-spring/web";
-import { interpolate } from "flubber";
 
 const AudioVisualizer = ({
   aiVoice = false,
