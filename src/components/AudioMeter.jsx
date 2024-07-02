@@ -20,6 +20,7 @@ function updateChatHistory(userPrompt, modelResponse) {
   chatHistory.push(userEntry, modelEntry);
   localStorage.setItem(storageKey, JSON.stringify(chatHistory));
 }
+
 const generativeCompletion = async (prompt) => {
   console.log(prompt);
   try {
@@ -40,6 +41,7 @@ const generativeCompletion = async (prompt) => {
   }
 };
 function AudioLevelMeter() {
+  const [isActive, setisActive] = useState(true);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(null);
@@ -50,14 +52,13 @@ function AudioLevelMeter() {
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
   const silenceTimerRef = useRef(null);
-  const SILENCE_THRESHOLD = 1.3;
-  const SILENCE_DURATION = 1200; // 1 second in milliseconds
+  const SILENCE_THRESHOLD = 1;
+  const SILENCE_DURATION = 2500; // 1 second in milliseconds
 
   const handleGenerativeResponse = async (transcribedText) => {
     console.log(transcribedText);
     const generativeText = await generativeCompletion(transcribedText);
     const textChunks = generativeText.trim().split("\n");
-    console.log(textChunks);
     const playAudioChunks = async (chunks, index = 0) => {
       if (index >= chunks.length) return setIsSpeaking(false);
       setIsSpeaking(true);
@@ -84,67 +85,73 @@ function AudioLevelMeter() {
           `TTS API request failed: ${ttsResponse.statusText} - ${errorDetails.error.message}`
         );
       }
+
       const ttsBlob = await ttsResponse.blob();
       const audioUrl = URL.createObjectURL(ttsBlob);
       const audioElement = new Audio(audioUrl);
-
       audioElement.play();
       audioElement.addEventListener("ended", () => {
+        if (index === chunks.length - 1) {
+          setisActive(true);
+          console.log("All audio chunks have finished playing");
+        }
         playAudioChunks(chunks, index + 1);
       });
     };
-
     playAudioChunks(textChunks);
   };
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: false })
       .then((stream) => {
-        mediaRecorderRef.current = new MediaRecorder(stream, {
-          mimeType: "audio/webm",
-        });
-        let chunkz = [];
-        mediaRecorderRef.current.ondataavailable = (e) => {
-            console.log(e.data.size)
-          if (e.data.size > 45000) {
-            chunkz.push(e.data);
-          }
-        };
-        mediaRecorderRef.current.onstop = () => {
-          if (chunkz.length > 0) {
-            const audioBlob = new Blob(chunkz, { type: "audio/webm" });
+        if (isActive) {
+          mediaRecorderRef.current = new MediaRecorder(stream, {
+            mimeType: "audio/webm",
+          });
+          let chunkz = [];
+          mediaRecorderRef.current.ondataavailable = (e) => {
+            console.log(e.data.size);
+            if (e.data.size > 20000) {
+              chunkz.push(e.data);
+            }
+          };
+          mediaRecorderRef.current.onstop = () => {
+            if (chunkz.length > 0) {
+              const audioBlob = new Blob(chunkz, { type: "audio/webm" });
+              handleTranscription(audioBlob);
+              chunkz = [];
+            }
+          };
 
-            handleTranscription(audioBlob);
-
-            chunkz = [];
-          }
-        };
-
-        audioContextRef.current = new (window.AudioContext ||
-          window.webkitAudioContext)();
-        analyserRef.current = audioContextRef.current.createAnalyser();
-        analyserRef.current.fftSize = 32;
-        const source = audioContextRef.current.createMediaStreamSource(stream);
-        source.connect(analyserRef.current);
-        measureAudioLevel();
+          audioContextRef.current = new (window.AudioContext ||
+            window.webkitAudioContext)();
+          analyserRef.current = audioContextRef.current.createAnalyser();
+          analyserRef.current.fftSize = 32;
+          const source =
+            audioContextRef.current.createMediaStreamSource(stream);
+          source.connect(analyserRef.current);
+          measureAudioLevel();
+          return () => {
+            if (audioContextRef.current) {
+              audioContextRef.current.close();
+            }
+            if (animationFrameRef.current) {
+              cancelAnimationFrame(animationFrameRef.current);
+            }
+            if (silenceTimerRef.current) {
+              clearTimeout(silenceTimerRef.current);
+            }
+          };
+        } else {
+          audioContextRef.current.close();
+          stream.getTracks().forEach((track) => track.stop());
+        }
       })
       .catch((err) => console.error("Error accessing microphone:", err));
-
-    return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
-      }
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      if (silenceTimerRef.current) {
-        clearTimeout(silenceTimerRef.current);
-      }
-    };
-  }, []);
+  }, [isActive]);
 
   const measureAudioLevel = () => {
-    if (!analyserRef.current) return;
+    if (!analyserRef.current && isSpeaking) return;
     const bufferLength = analyserRef.current.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     analyserRef.current.getByteFrequencyData(dataArray);
@@ -173,16 +180,17 @@ function AudioLevelMeter() {
 
   useEffect(() => {
     if (mediaRecorderRef.current) {
-      if (isRecording) {
+      if (isRecording & !isSpeaking) {
         mediaRecorderRef.current.start();
       } else if (!isRecording) {
         mediaRecorderRef.current.stop();
       }
     }
-  }, [isRecording]);
+  }, [isRecording, isSpeaking]);
 
   const handleTranscription = async (audioBlob) => {
     setIsTranscribing(true);
+    setisActive(false);
     const formData = new FormData();
     const audioFile = new File([audioBlob], "audio.webm", {
       type: "audio/webm",
@@ -219,14 +227,13 @@ function AudioLevelMeter() {
         aiVoice={isSpeaking}
         fetching={isTranscribing}
         voice={isRecording}
+        active={isActive}
       />
       <FaMicrophone
-        className={`mx-auto mt-12 text-4xl text-indigo-800 h-[2em] w-[2em] py-4 rounded-full bg-white shadow-lg ${
-          isRecording
-            ? "text-red-600"
-            : "hover:text-indigo-600 hover:scale-[1.02]"
+        className={`mx-auto mt-12 text-4xl h-[2em] w-[2em] py-4 rounded-full bg-white shadow-lg ${
+          isActive ? "text-red-600" : "text-gray-600 hover:scale-[1.02]"
         }`}
-        // onClick=  ///stop everything 
+        onClick={() => setisActive(!isActive)}
       />
     </div>
   );
