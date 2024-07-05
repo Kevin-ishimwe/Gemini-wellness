@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import VoiceTherapy from "./pages/VoiceTherapy";
 import GetStarted from "./pages/GetStarted";
-
+import ChatTherapy from "./pages/ChatTherapy";
 
 function App() {
   return (
@@ -48,6 +48,7 @@ function App() {
             }
           />
           <Route path="/therapy/voice" element={<VoiceTherapy />} />
+          <Route path="/therapy/chat" element={<ChatTherapy />} />
           <Route path="/getstarted" element={<GetStarted />} />
         </Routes>
       </Router>

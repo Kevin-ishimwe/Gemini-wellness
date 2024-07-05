@@ -5,7 +5,7 @@ const services = [
     service: "Health Track Advisor",
     description:
       "Personalized guidance for your wellness journey, including nutrition, fitness, and lifestyle recommendations.",
-    route: "/health-advisor",
+    route: "/therapy/chat",
     icon: "🏋️‍♂️",
     bgColor: "bg-blue-100",
     textColor: "text-blue-800",
@@ -16,7 +16,7 @@ const services = [
     service: "AI Therapist Bot",
     description:
       "24/7 AI-powered chat support for mental health and emotional well-being.",
-    route: "/ai-therapist",
+    route: "/therapy/voice",
     icon: "🤖",
     bgColor: "bg-green-100",
     textColor: "text-green-800",
@@ -43,12 +43,11 @@ const GetStarted = () => {
             </h3>
             <img src={service.img} alt="" className="w-full" />
             <p className="mb-4">{service.description}</p>
-            <a
-              href={service.route}
+            <NavLink to={service.route}
               className="inline-block px-4 py-2 bg-indigo-700 text-white rounded-full font-semibold hover:bg-gray-100 transition duration-300 ease-in-out w-max"
             >
               Get Started
-            </a>
+            </NavLink>
           </div>
         ))}
       </div>
