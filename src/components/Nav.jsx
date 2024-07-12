@@ -12,7 +12,6 @@ function Nav() {
     { text: "Features", link: "/advice" },
     { text: "FAQ", link: "/faq" },
     { text: "Reviews", link: "/reviews" },
-    { text: "Therapy", link: "/therapy" },
     { text: "Contact", link: "/contact" },
   ];
   const menuHandler = () => (menu ? setmenu(false) : setmenu(true));

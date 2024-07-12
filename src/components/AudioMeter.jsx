@@ -4,7 +4,7 @@ import { FaMicrophone } from "react-icons/fa";
 
 const key1 = import.meta.env.VITE_OPENAI_API_KEY;
 
-function updateChatHistory(userPrompt, modelResponse) {
+export const updateChatHistory = (userPrompt, modelResponse) => {
   const storageKey = "ChatHistory";
   let chatHistory = JSON.parse(localStorage.getItem(storageKey)) || [];
 
@@ -19,7 +19,7 @@ function updateChatHistory(userPrompt, modelResponse) {
   };
   chatHistory.push(userEntry, modelEntry);
   localStorage.setItem(storageKey, JSON.stringify(chatHistory));
-}
+};
 
 function AudioLevelMeter() {
   const [isActive, setisActive] = useState(true);
@@ -34,7 +34,8 @@ function AudioLevelMeter() {
   const animationFrameRef = useRef(null);
   const silenceTimerRef = useRef(null);
   const SILENCE_THRESHOLD = 1;
-  const SILENCE_DURATION = 2500; // 1 second in milliseconds
+  const SILENCE_DURATION = 2000; // 1 second in milliseconds
+  const localStream = useRef(null);
 
   const handleGenerativeResponseVoice = async (prompt, response) => {
     console.log(prompt, response);
@@ -81,13 +82,22 @@ function AudioLevelMeter() {
     playAudioChunks(textChunks);
   };
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true, video: false })
+    localStream.current = navigator.mediaDevices
+      .getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true },
+        video: false,
+      })
       .then((stream) => {
         if (isActive) {
-          mediaRecorderRef.current = new MediaRecorder(stream, {
-            mimeType: "audio/webm",
-          });
+          try {
+            mediaRecorderRef.current = new MediaRecorder(stream, {
+              mimeType: "audio/webm",
+            });
+          } catch (err) {
+            mediaRecorderRef.current = new MediaRecorder(stream, {
+              mimeType: "video/mp4",
+            });
+          }
           let chunkz = [];
           mediaRecorderRef.current.ondataavailable = (e) => {
             console.log(e.data.size);
@@ -122,12 +132,16 @@ function AudioLevelMeter() {
               clearTimeout(silenceTimerRef.current);
             }
           };
-        } else {
-          audioContextRef.current.close();
-          stream.getTracks().forEach((track) => track.stop());
         }
       })
       .catch((err) => console.error("Error accessing microphone:", err));
+    if (!isActive) {
+      audioContextRef.current.close();
+      return mediaRecorderRef.current.stream.getTracks().forEach((track) => {
+        mediaRecorderRef.current.stream?.removeTrack(track);
+        track.stop();
+      });
+    }
   }, [isActive]);
 
   const measureAudioLevel = () => {
@@ -186,13 +200,16 @@ function AudioLevelMeter() {
     formData.append("mimeType", "webm");
     formData.append("model", "whisper-1");
     try {
-      const chatResponse = await fetch("http://localhost:2020/conversation", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-        body: formData,
-      });
+      const chatResponse = await fetch(
+        "http://localhost:2020/conversation/voice",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+          },
+          body: formData,
+        }
+      );
       const res = await chatResponse.json();
       console.log(res.response);
       const data = JSON.parse(res.response.replace(/```|json/g, ""));
@@ -207,8 +224,12 @@ function AudioLevelMeter() {
 
   return (
     <div>
-      <p>Current Audio Level: {audioLevel.toFixed(2)}</p>
-      <p>Status: {isSpeaking ? "Speaking" : "Silent"}</p>
+      <p
+        className={` bg-red-300 h-[.4em] mx-auto my-4 rounded-full linear-bg`}
+        style={{width:`${14 * audioLevel.toFixed(2)+1}em`}}
+      >
+       
+      </p>
       <AudioVisualizer
         aiVoice={isSpeaking}
         fetching={isTranscribing}

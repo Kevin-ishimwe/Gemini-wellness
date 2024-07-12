@@ -67,21 +67,18 @@ p {
 }
 
 .anim-1 {
-  animation: happear 100ms 1;
-  animation: name duration timing-function delay iteration-count direction
-    fill-mode;
+  animation: happear 500ms 1;
 }
 .flip {
   transform: scale(-1, 1);
 }
 @keyframes happear {
   from {
-    height: 0em;
     opacity: 0;
+   scale: 0;
   }
   to {
-    height: fit-content;
-    opacity: 1;
+    scale: 1;
   }
 }
 
@@ -107,7 +104,7 @@ a:hover {
   padding: 1em;
   text-align: center; /* Center the text */
   opacity: 0; /* Initially hidden */ /* Smooth transition */
-/* Slide up from bottom */
+  /* Slide up from bottom */
 }
 
 .text-overlay-container:hover .overlay-text {

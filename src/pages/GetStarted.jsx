@@ -36,14 +36,15 @@ const GetStarted = () => {
         {services.map((service, index) => (
           <div
             key={index}
-            className={`p-6 rounded-lg shadow-md transition duration-300 ease-in-out w-[25em] mx-4 flex flex-col justify-center`}
+            className={`anim-1 p-6 rounded-lg shadow-md transition duration-300 ease-in-out w-[25em] mx-4 flex flex-col justify-center`}
           >
             <h3 className="text-xl font-bold mb-2">
               {service.icon} {service.service}
             </h3>
             <img src={service.img} alt="" className="w-full" />
             <p className="mb-4">{service.description}</p>
-            <NavLink to={service.route}
+            <NavLink
+              to={service.route}
               className="inline-block px-4 py-2 bg-indigo-700 text-white rounded-full font-semibold hover:bg-gray-100 transition duration-300 ease-in-out w-max"
             >
               Get Started
