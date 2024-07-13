@@ -26,11 +26,11 @@ const AudioVisualizer = ({
   });
 
   return (
-    <div className=" w-[100vw] flex justify-center min-h-[50vh] items-center">
+    <div className=" flex justify-center min-h-[20vh] items-center">
       <div
         className={
           !voice && !fetching && !aiVoice
-            ? "h-[.5em] w-[70vw] linear-bg rounded-full shadow-lg" // 1 0
+            ? "h-[.5em] min-w-[50vw] mx-12 w-full linear-bg rounded-full shadow-lg" // 1 0
             : "h-[15em] w-[15em] linear-bg rounded-full p-4 shadow-lg" //0 0
         }
       >

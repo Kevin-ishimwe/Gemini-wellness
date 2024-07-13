@@ -35,7 +35,6 @@ function AudioLevelMeter() {
   const silenceTimerRef = useRef(null);
   const SILENCE_THRESHOLD = 1;
   const SILENCE_DURATION = 2000; // 1 second in milliseconds
-  const localStream = useRef(null);
 
   const handleGenerativeResponseVoice = async (prompt, response) => {
     console.log(prompt, response);
@@ -82,65 +81,69 @@ function AudioLevelMeter() {
     playAudioChunks(textChunks);
   };
   useEffect(() => {
-    localStream.current = navigator.mediaDevices
-      .getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true },
-        video: false,
-      })
-      .then((stream) => {
-        if (isActive) {
-          try {
-            mediaRecorderRef.current = new MediaRecorder(stream, {
-              mimeType: "audio/webm",
-            });
-          } catch (err) {
-            mediaRecorderRef.current = new MediaRecorder(stream, {
-              mimeType: "video/mp4",
-            });
-          }
-          let chunkz = [];
-          mediaRecorderRef.current.ondataavailable = (e) => {
-            console.log(e.data.size);
-            if (e.data.size > 20000) {
-              chunkz.push(e.data);
+    try {
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: { echoCancellation: true, noiseSuppression: true },
+          video: false,
+        })
+        .then((stream) => {
+          if (isActive) {
+            try {
+              mediaRecorderRef.current = new MediaRecorder(stream, {
+                mimeType: "audio/webm",
+              });
+            } catch (err) {
+              mediaRecorderRef.current = new MediaRecorder(stream, {
+                mimeType: "video/mp4",
+              });
             }
-          };
-          mediaRecorderRef.current.onstop = () => {
-            if (chunkz.length > 0) {
-              const audioBlob = new Blob(chunkz, { type: "audio/webm" });
-              handleTranscription(audioBlob);
-              chunkz = [];
-            }
-          };
+            let chunkz = [];
+            mediaRecorderRef.current.ondataavailable = (e) => {
+              console.log(e.data.size);
+              if (e.data.size > 20000) {
+                chunkz.push(e.data);
+              }
+            };
+            mediaRecorderRef.current.onstop = () => {
+              if (chunkz.length > 0) {
+                const audioBlob = new Blob(chunkz, { type: "audio/webm" });
+                handleTranscription(audioBlob);
+                chunkz = [];
+              }
+            };
 
-          audioContextRef.current = new (window.AudioContext ||
-            window.webkitAudioContext)();
-          analyserRef.current = audioContextRef.current.createAnalyser();
-          analyserRef.current.fftSize = 32;
-          const source =
-            audioContextRef.current.createMediaStreamSource(stream);
-          source.connect(analyserRef.current);
-          measureAudioLevel();
-          return () => {
-            if (audioContextRef.current) {
-              audioContextRef.current.close();
-            }
-            if (animationFrameRef.current) {
-              cancelAnimationFrame(animationFrameRef.current);
-            }
-            if (silenceTimerRef.current) {
-              clearTimeout(silenceTimerRef.current);
-            }
-          };
-        }
-      })
-      .catch((err) => console.error("Error accessing microphone:", err));
-    if (!isActive) {
-      audioContextRef.current.close();
-      return mediaRecorderRef.current.stream.getTracks().forEach((track) => {
-        mediaRecorderRef.current.stream?.removeTrack(track);
-        track.stop();
-      });
+            audioContextRef.current = new (window.AudioContext ||
+              window.webkitAudioContext)();
+            analyserRef.current = audioContextRef.current.createAnalyser();
+            analyserRef.current.fftSize = 32;
+            const source =
+              audioContextRef.current.createMediaStreamSource(stream);
+            source.connect(analyserRef.current);
+            measureAudioLevel();
+            return () => {
+              if (audioContextRef.current) {
+                audioContextRef.current.close();
+              }
+              if (animationFrameRef.current) {
+                cancelAnimationFrame(animationFrameRef.current);
+              }
+              if (silenceTimerRef.current) {
+                clearTimeout(silenceTimerRef.current);
+              }
+            };
+          }
+        })
+        .catch((err) => console.error("Error accessing microphone:", err));
+      if (!isActive) {
+        audioContextRef.current.close();
+        return mediaRecorderRef.current.stream.getTracks().forEach((track) => {
+          mediaRecorderRef.current.stream?.removeTrack(track);
+          track.stop();
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, [isActive]);
 
@@ -194,7 +197,7 @@ function AudioLevelMeter() {
     formData.append(
       "history",
       localStorage.getItem("ChatHistory")
-        ? localStorage.getItem("ChatHistory")
+        ? JSON.parse(localStorage.getItem("ChatHistory"))
         : []
     );
     formData.append("mimeType", "webm");
@@ -226,10 +229,8 @@ function AudioLevelMeter() {
     <div>
       <p
         className={` bg-red-300 h-[.4em] mx-auto my-4 rounded-full linear-bg`}
-        style={{width:`${14 * audioLevel.toFixed(2)+1}em`}}
-      >
-       
-      </p>
+        style={{ width: `${14 * audioLevel.toFixed(2) + 1}em` }}
+      ></p>
       <AudioVisualizer
         aiVoice={isSpeaking}
         fetching={isTranscribing}
