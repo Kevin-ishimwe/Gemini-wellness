@@ -66,7 +66,8 @@ function ChatTherapy() {
 
   const handleChat = async () => {
     try {
-      setmessages((prev) => [...prev, { user: prompt }]);
+      setmessages((prev) => [...(prev ?? []), { user: prompt }]);
+      setprompt("");
       await fetch("http://localhost:2020/conversation/chat", {
         method: "POST",
         headers: {
@@ -81,7 +82,6 @@ function ChatTherapy() {
       })
         .then((res) => res.json())
         .then((data) => {
-          setprompt("");
           if (data.response) {
             updateChatHistory(prompt, data.response);
             setmessages((prev) => [...prev, { model: data.response }]);
@@ -118,23 +118,25 @@ function ChatTherapy() {
       <div className="bg-[#F9F9F9] relative">
         <div className="w-[full] z-[12] top-0 relative">
           <Logo_max orientation={true} />
-          <TherapyMenu fixed={true} />
-          {messages?.length > 0 ? (
-            ""
-          ) : (
-            <div className="flex md:w-[80vw] justify-center mx-auto my-12 ">
-              {demo.map((item, index) => (
-                <div
-                  key={index}
-                  className="mx-4 w-fit md:w-[16em] min-h-[12em] bg-white md:mx-12 rounded-[20px] p-8 py-12 shadow-[1px_10px_40px_#e9e9e93d] hover:shadow-[1px_10px_30px_#1C0AE51C] hover:scale-105 text-indigo-500 flex items-center"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="flex ">
+            {messages?.length > 0 ? (
+              ""
+            ) : (
+              <div className="flex md:w-[80vw] justify-center mx-auto my-12 ">
+                {demo.map((item, index) => (
+                  <div
+                    key={index}
+                    className="mx-4 w-fit md:w-[16em] h-[12em] bg-white md:mx-12 rounded-[20px] p-8 py-12 shadow-[1px_10px_40px_#e9e9e93d] hover:shadow-[1px_10px_30px_#1C0AE51C] hover:scale-105 text-indigo-500 flex items-center"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            )}
+            <TherapyMenu />
+          </div>
         </div>
-        <div className="md:w-[80vw] mx-auto px-4 pb-[10em] mt-12">
+        <div className=" mx-auto px-4 pb-[10em] mt-12">
           {messages?.map((item, index) =>
             item.model ? (
               <div

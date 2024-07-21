@@ -27,7 +27,11 @@ function App() {
                   <Route
                     path="/register"
                     element={
-                      <GoogleOAuthProvider clientId={"sdkdkmf"}>
+                      <GoogleOAuthProvider
+                        clientId={
+                          "177416270778-ifuh7b2con9gc295gfva790t85rm38cj.apps.googleusercontent.com"
+                        }
+                      >
                         <Signup />
                       </GoogleOAuthProvider>
                     }
@@ -35,7 +39,12 @@ function App() {
                   <Route
                     path="/login"
                     element={
-                      <GoogleOAuthProvider clientId={"sdkdkmf"}>
+                      <GoogleOAuthProvider
+                        clientId={
+                          "177416270778-ifuh7b2con9gc295gfva790t85rm38cj.apps.googleusercontent.com"
+                        }
+                      >
+                        
                         <Login />
                       </GoogleOAuthProvider>
                     }

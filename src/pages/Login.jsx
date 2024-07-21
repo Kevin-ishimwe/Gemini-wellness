@@ -23,14 +23,8 @@ const Login = () => {
         console.log("login initiated");
       },
     },
-    // ,
-    // {
-    //   icon: <FaApple className={styleIcon} />,
-    //   action: () => {
-    //     console.log("login initiated");
-    //   },
-    // },
   ];
+  console.log(JSON.parse(localStorage.getItem("G_auth_data"))?.access_token.split(".")[1])
   return (
     <div className="min-h-[80vh] w-full flex flex-col items-center justify-center">
       {islogin ? <Success notification={"login successful"} /> : ""}
