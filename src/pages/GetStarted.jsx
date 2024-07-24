@@ -5,7 +5,7 @@ const services = [
     service: "Health Track Advisor",
     description:
       "Personalized guidance for your wellness journey, including nutrition, fitness, and lifestyle recommendations.",
-    route: "/therapy/chat",
+    route: "/health",
     icon: "🏋️‍♂️",
     bgColor: "bg-blue-100",
     textColor: "text-blue-800",

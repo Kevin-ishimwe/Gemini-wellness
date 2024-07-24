@@ -6,31 +6,49 @@ function G_auth_Btn({ setislogin }) {
   const navigate = useNavigate();
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      // handle token validation oon backend on fetch
-      console.log(tokenResponse,tokenResponse.access_token.split(".")[1]);
-      const link = `http://localhost:2020/user/auth/complete?code=4/${
-        tokenResponse.access_token.split(".")[1]
-      }&scope=email%20profile%20openid%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/userinfo.email&authuser=1&prompt=consent`;
-      localStorage.setItem("G_auth_data", JSON.stringify(tokenResponse));
-      await fetch(link, {
-        method: "GET",
-        mode: 'cors',
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-        });
-      setislogin(true);
-      setTimeout(() => {
+      try {
+        const userInfo = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+          }
+        );
+        const userData = await userInfo.json();
+        console.log(await userData);
+        const response = await fetch(
+          "http://localhost:2020/user/auth/complete",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            mode: "cors",
+            body: JSON.stringify({ user: await userData }),
+          }
+        )
+          .then((res) => res.json())
+
+  
+
+        const data = await response;
+
+        if (data.status === "success") {
+          setislogin(true);
+          // Handle successful login (e.g., store token, redirect)
+          localStorage.setItem("user_token", data.token);
+          localStorage.setItem("user_data", JSON.stringify(data.data));
+          navigate("/getstarted");
+        } else {
+          throw new Error(data.message || "Authentication failed");
+        }
+      } catch (error) {
+        console.error("Authentication error:", error);
         setislogin(false);
-        // navigate("/dashboard/discover");
-      }, 2000);
+      }
     },
-    onError: () => {
-      console.error("Google login failed");
+    onError: (error) => {
+      console.error("Google login failed", error);
+      setislogin(false);
     },
   });
   return (

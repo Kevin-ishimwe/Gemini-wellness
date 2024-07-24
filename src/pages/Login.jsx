@@ -1,22 +1,51 @@
 import { useState, useRef } from "react";
-import { BsFacebook } from "react-icons/bs";
-import { FaApple } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import G_auth_Btn from "../components/G_auth_Btn";
 import Success from "../components/notification/Success";
+
 const Login = () => {
-  // const [form, setform] = useState({});
   const [islogin, setislogin] = useState(false);
-  const signup = async () => {};
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+
+
+  const loginHandler = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const response = await fetch("http://localhost:2020/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      console.log(data)
+      if (data.status === "success") {
+        setislogin(true);
+        localStorage.setItem("user_token", data.token);
+        localStorage.setItem("user_data", JSON.stringify(data.data));
+        navigate("/getstarted");
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An error occurred during login");
+    }
+  };
+
   const password = useRef();
-  const styleIcon = "text-4xl";
+ 
   const loginwith = [
-    // {
-    //   icon: <BsFacebook className={styleIcon} />,
-    //   action: () => {
-    //     console.log("login initiated");
-    //   },
-    // },
     {
       icon: <G_auth_Btn setislogin={setislogin} />,
       action: () => {
@@ -24,12 +53,23 @@ const Login = () => {
       },
     },
   ];
-  console.log(JSON.parse(localStorage.getItem("G_auth_data"))?.access_token.split(".")[1])
+  
+  const handleInputChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <div className="min-h-[80vh] w-full flex flex-col items-center justify-center">
       {islogin ? <Success notification={"login successful"} /> : ""}
+      {error && <div className="text-red-500 mb-4">{error}</div>}
       <h1 className="text-4xl mb-12">Sign In</h1>
-      <div className="md:w-[70%] min-w-fit max-w-[40em] text-[#292D32] grid">
+      <form
+        onSubmit={loginHandler}
+        className="md:w-[70%] min-w-fit max-w-[40em] text-[#292D32] grid"
+      >
         <div className="grid">
           <label htmlFor="email" className="font-bold mb-1">
             Email{" "}
@@ -39,6 +79,9 @@ const Login = () => {
             type="text"
             placeholder="john@email.com"
             className="border-[1px] border-gray-400 rounded-lg py-3 px-4"
+            value={form.email}
+            onChange={handleInputChange}
+            required
           />
         </div>
         <div className="grid mt-4 relative">
@@ -51,16 +94,17 @@ const Login = () => {
             type="password"
             placeholder="**********"
             className="border-[1px] border-gray-400 rounded-lg py-3 px-4 "
+            value={form.password}
+            onChange={handleInputChange}
+            required
           />
           <FaEye
             className="text-2xl absolute right-4 top-[55%] text-gray-400"
             onClick={(e) => {
-              e.target.style.color == "black"
-                ? (e.target.style.color = "gray")
-                : (e.target.style.color = "black");
-              password.current.type == "password"
-                ? (password.current.type = "text")
-                : (password.current.type = "password");
+              e.target.style.color =
+                e.target.style.color === "black" ? "gray" : "black";
+              password.current.type =
+                password.current.type === "password" ? "text" : "password";
             }}
           />
         </div>
@@ -81,19 +125,17 @@ const Login = () => {
         >
           Continue
         </button>
-        <h3 className="uppercase font-bold text-center  text-[#818181] mt-2">
+        <h3 className="uppercase font-bold text-center text-[#818181] mt-2">
           Or Continue with
         </h3>
         <div className="flex justify-center mt-1">
-          {loginwith.map(({ icon, action }) => {
-            return (
-              <button key={icon} className="mx-2">
-                {icon}
-              </button>
-            );
-          })}
+          {loginwith.map(({ icon, action }, index) => (
+            <button key={index} className="mx-2">
+              {icon}
+            </button>
+          ))}
         </div>
-      </div>
+      </form>
     </div>
   );
 };
