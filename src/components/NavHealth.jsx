@@ -63,7 +63,7 @@ function SideNav() {
   return (
     <div>
       <div
-        className="fixed top-0 bg-white z-[100] flex flex-col left-1 h-[98vh] items-center backdrop-blur-[40em] shadow-[0_0_5px_#c6c6e6] rounded-[1em] mt-[1vh] "
+        className=" bg-white z-[100] flex flex-col left-1 h-[98vh] items-center backdrop-blur-[40em] shadow-[0_0_5px_#c6c6e6] rounded-[1em] mt-[1vh] ml-2 "
         style={{
           width: fold ? "4em" : "15em",
           transition: ".1s",

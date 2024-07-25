@@ -11,6 +11,7 @@ import VoiceTherapy from "./pages/VoiceTherapy";
 import GetStarted from "./pages/GetStarted";
 import ChatTherapy from "./pages/ChatTherapy";
 import HealthTrack from "./pages/HealthTrack";
+import SideNav from "./components/NavHealth";
 
 function App() {
   return (
@@ -59,7 +60,17 @@ function App() {
           <Route path="/therapy/voice" element={<VoiceTherapy />} />
           <Route path="/therapy/chat" element={<ChatTherapy />} />
           <Route path="/getstarted" element={<GetStarted />} />
-          <Route path="/health" element={<HealthTrack />} />
+          <Route
+            path="/health"
+            element={
+              <div className="flex items-center">
+                <SideNav />
+                <Routes>
+                  <Route path="/" element={<HealthTrack />} />
+                </Routes>
+              </div>
+            }
+          />
         </Routes>
       </Router>
     </>
