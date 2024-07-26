@@ -12,6 +12,8 @@ import GetStarted from "./pages/GetStarted";
 import ChatTherapy from "./pages/ChatTherapy";
 import HealthTrack from "./pages/HealthTrack";
 import SideNav from "./components/NavHealth";
+import Activity from "./pages/TrackPages/Activity";
+
 
 function App() {
   return (
@@ -61,12 +63,14 @@ function App() {
           <Route path="/therapy/chat" element={<ChatTherapy />} />
           <Route path="/getstarted" element={<GetStarted />} />
           <Route
-            path="/health"
+            path="/health/*"
             element={
-              <div className="flex items-center">
+              <div className="flex items-center w-full">
                 <SideNav />
                 <Routes>
                   <Route path="/" element={<HealthTrack />} />
+                  <Route path="/Activity" element={<Activity />} />
+                  <Route path="/*" element={<HealthTrack />} />
                 </Routes>
               </div>
             }

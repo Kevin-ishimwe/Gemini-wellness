@@ -79,7 +79,7 @@ function NutritionChart({ nutritionData }) {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "bottom",
       },
       title: {
         display: true,
@@ -106,7 +106,7 @@ function NutritionChart({ nutritionData }) {
         label: "Water Intake (ml)",
         data: waterIntake.map((entry) => entry.amount),
         borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
+        tension: 0.9,
       },
     ],
   };
@@ -124,20 +124,20 @@ function NutritionChart({ nutritionData }) {
     },
     scales: {
       y: {
-        beginAtZero: true,
+        beginAtZero: false,
       },
     },
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow">
+    <div className="bg-white p-4 rounded-lg">
       <h2 className="text-lg font-semibold mb-2">Nutrition Overview</h2>
-      <div className="mb-6">
         <Bar data={mealData} options={mealOptions} />
+      <div className="mb-6">
+
       </div>
-      <div>
         <Line data={waterData} options={waterOptions} />
-      </div>
+      <div></div>
     </div>
   );
 }

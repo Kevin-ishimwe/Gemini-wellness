@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 import Logo_max from "./Logo-max";
@@ -19,51 +19,51 @@ function SideNav() {
   const iconStyle = `text-2xl  text-[#07408b] ${fold ? "mr-0" : "mr-3"}`;
   const items = [
     {
-      link: "Dashboard",
+      link: "/health/Dashboard",
       name: "Dashboard",
       icon: <FaHome className={iconStyle} />,
     },
     {
-      link: "Activity",
+      link: "/health/Activity",
       name: "Activity",
       icon: <FaHeartbeat className={iconStyle} />,
     },
     {
-      link: "Sleep",
+      link: "/health/Sleep",
       name: "Sleep",
       icon: <FaBed className={iconStyle} />,
     },
     {
-      link: "Nutrition",
+      link: "/health/Nutrition",
       name: "Nutrition",
       icon: <FaUtensils className={iconStyle} />,
     },
     {
-      link: "Weight",
+      link: "/health/Weight",
       name: "Weight",
       icon: <FaWeight className={iconStyle} />,
     },
     {
-      link: "Vitals",
+      link: "/health/Vitals",
       name: "Vital Signs",
       icon: <FaChartLine className={iconStyle} />,
     },
     {
-      link: "Medications",
+      link: "/health/Medications",
       name: "Medications",
       icon: <FaPills className={iconStyle} />,
     },
     {
-      link: "Goals",
+      link: "/health/Goals",
       name: "Goals",
       icon: <FaCalendarAlt className={iconStyle} />,
     },
   ];
 
   return (
-    <div>
+    <div >
       <div
-        className=" bg-white z-[100] flex flex-col left-1 h-[98vh] items-center backdrop-blur-[40em] shadow-[0_0_5px_#c6c6e6] rounded-[1em] mt-[1vh] ml-2 "
+        className=" bg-white z-[100] flex flex-col h-[98vh] items-center shadow-[0_0_5px_#c6c6e6] rounded-[1em] mt-[1vh] ml-2 "
         style={{
           width: fold ? "4em" : "15em",
           transition: ".1s",

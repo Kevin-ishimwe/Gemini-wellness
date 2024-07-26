@@ -17,9 +17,9 @@ function HealthTrack() {
       fetchHealthAnalysis(userData);
     }
   }, []);
-  const clean=(str)=>{
-    return  str.replace("```json","").replace("```","")
-  }
+  const clean = (str) => {
+    return str.replace("```json", "").replace("```", "");
+  };
   const fetchHealthAnalysis = async (userData) => {
     try {
       const response = await fetch("http://localhost:2020/health/analysis", {
@@ -41,9 +41,7 @@ function HealthTrack() {
     }
   };
 
-  const str =
-    '```json\n{\n  "summary": "Kevin, your overall health trends appear positive based on the available data. You\'re getting a good amount of physical activity and generally healthy sleep.  Maintaining these habits is encouraged. However, more complete data, particularly dietary intake details, is needed for a comprehensive assessment.",\n  "risks": [\n    "Potential for nutritional gaps given limited meal data.  A detailed analysis of calorie intake, macronutrient ratios, and micronutrient intake is not possible with only two meal entries.",\n    "Occasional mild pain reported, warranting monitoring for potential underlying causes or triggers."\n  ],\n  "recommendations": {\n    "physicalActivity": {\n      "Maintain consistent activity level, aiming for at least 150 minutes of moderate-intensity exercise or 75 minutes of vigorous-intensity exercise per week.",\n      "Consider incorporating a variety of exercises like strength training 2-3 times per week for overall fitness."\n    },\n    "sleep": {\n      "Continue prioritizing consistent sleep schedules and a relaxing bedtime routine to maintain current sleep quality."\n    },\n    "nutrition": {\n      "Log more comprehensive meal data, including portion sizes and specific ingredients, to gain better insights into dietary habits and identify potential areas for improvement.",\n      "Consult with a registered dietitian or nutritionist to receive personalized recommendations based on your individual needs and health goals."\n    },\n    "weightManagement": "Maintain current healthy weight and body composition."\n  },\n  "newGoals": [\n    "Log at least 3 complete meals per day to allow for a thorough dietary analysis.",\n    "Incorporate strength training exercises 2-3 times per week.",\n    "Identify and address potential triggers for reported pain episodes (e.g., specific activities, stress)."\n  ],\n  "correlations": [\n    "Higher step counts and distance covered correlate with increased calorie expenditure, suggesting a positive relationship between physical activity and energy balance."\n  ]\n}\n``` \n';
-  console.log((clean(str)));
+  console.log(user?.nutrition);
   if (!user)
     return (
       <div className=" h-[100vh] w-full flex items-center justify-center">
@@ -54,42 +52,30 @@ function HealthTrack() {
     );
   return (
     <>
-      <div className="flex overflow-y-auto h-screen ">
-        <div className="p-6 ml-[5em] mx-4 min-w-[60em] pt-12">
-          <h1 className="text-2xl font-bold mb-6 text-left">
-            Welcome, {user.personalInfo.username}!
-          </h1>
+      <div className="flex overflow-y-auto h-screen w-full justify-left">
+        <div className="p-6 mx-4  pt-12 w-full">
           <div className="bg-white p-4 rounded-lg shadow my-2 text-left">
-            <h2 className="text-lg font-semibold mb-2">Quick Add</h2>
-            <div className="flex space-x-2">
-              <button className="flex items-center bg-blue-500 text-white px-3 py-2 rounded">
-                <FaPlus className="mr-2" /> Log Activity
-              </button>
-              <button className="flex items-center bg-green-500 text-white px-3 py-2 rounded">
-                <FaPlus className="mr-2" /> Log Meal
-              </button>
-            </div>
+            <h1 className="text-3xl font-bold mb-6 text-left text-primary-200">
+              Welcome, {user.personalInfo.username}!
+            </h1>
           </div>
           {/* Activity Summary */}
-          <div className="bg-white p-4 rounded-lg shadow w-full">
+          <div className="bg-white p-4 rounded-lg shadow w-full text-primary-200 text-center">
             <ActivitySummaryChart physicalActivity={user.physicalActivity} />
           </div>
-          <div className="grid gap-2 grid-cols-2 py-6 bg-white my-4 px-4 rounded-lg ">
-            {/* Sleep Insights */}
-            <div>
-              <div className="bg-white rounded-lg shadow">
-                <SleepChart
-                  sleepData={user.sleep}
-                  moodData={user.symptoms}
-                  activityData={user.physicalActivity.activeMinutes}
-                />
-              </div>
-              <div className="mt-2 bg-white rounded-lg shadow">
-                <VitalSignsChart vitalSignsData={user.vitalSigns} />
-              </div>
+
+          <div className="py-6 bg-white my-4 px-4 rounded-lg text-primary-200 font-extrabold text-center">
+            <div className="bg-white rounded-lg shadow grid gap-2 grid-cols-2">
+              <SleepChart
+                sleepData={user.sleep}
+                moodData={user.symptoms}
+                activityData={user.physicalActivity.activeMinutes}
+              />
+
+              <VitalSignsChart vitalSignsData={user.vitalSigns} />
             </div>
-            {/* Nutrition Overview */}
-            <div>
+
+            <div className="w-full">
               <NutritionChart nutritionData={user.nutrition} />
             </div>
             {/* Weight Tracker */}
@@ -103,8 +89,73 @@ function HealthTrack() {
           </div>
         </div>
       </div>
-      <div className=" flex-1 bg-white w-[30em] h-[90vh] mr-4 rounded-lg shadow-sm">
-        analysis here
+      <div className="flex flex-col p-4 w-[30em] bg-white h-[90vh] mr-2 rounded-lg shadow-sm overflow-y-auto overflow-x-auto">
+        <h2 className="text-xl font-bold mb-4 text-primary-200 text-center p-4 shadow-[0px_2px_20px_#dadada] rounded-lg">
+          Gemini Health Report
+        </h2>
+
+        {healthAnalysis == null ? (
+          <>
+            <div className="w-full h-[90vh] flex items-center ">
+              <div className=" w-full h-[20em] flex items-center flex-col">
+                <img
+                  src={logo}
+                  className="w-[6em] border-[3px] border-b-[#189fe3] border-r-[#189fe3] border-t-[#9d79c6] border-l-[#9d79c6] rounded-full mb-4 animate-spin"
+                  alt=""
+                />
+                <h1 className="text-center w-full text-2xl font-black text-primary-100 animate-pulse">
+                  Analysing Data
+                </h1>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="">
+            <div className="mb-4 bg-indigo-100 px-4 py-2 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2">Summary</h3>
+              <p>{healthAnalysis.summary}</p>
+            </div>
+
+            <div className="mb-4 bg-purple-100 px-4 py-2 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2">Correlations</h3>
+              <ul className="list-disc pl-5">
+                {healthAnalysis.correlations.map((correlation, index) => (
+                  <li key={index}>{correlation}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mb-4 bg-yellow-100 px-4 py-2 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2">New Goals</h3>
+              <ul className="list-disc pl-5">
+                {healthAnalysis.newGoals.map((goal, index) => (
+                  <li key={index}>{goal}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mb-4 bg-green-100 px-4 py-2 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2">Recommendations</h3>
+              {Object.entries(healthAnalysis.recommendations).map(
+                ([key, value]) => (
+                  <div key={key} className="mb-2">
+                    <h4 className="font-medium capitalize">{key}</h4>
+                    <p>{value}</p>
+                  </div>
+                )
+              )}
+            </div>
+
+            <div className="mb-4 bg-red-100 px-4 py-2 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2">Risks</h3>
+              <ul className="list-disc pl-5">
+                {healthAnalysis.risks.map((risk, index) => (
+                  <li key={index}>{risk}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
