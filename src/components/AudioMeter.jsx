@@ -21,6 +21,32 @@ export const updateChatHistory = (userPrompt, modelResponse) => {
   localStorage.setItem(storageKey, JSON.stringify(chatHistory));
 };
 
+const handleTranscription = async (audioBlob) => {
+  try {
+    const formData = new FormData();
+    const audioFile = new File([audioBlob], "audio.webm", {
+      type: "audio/webm",
+    });
+    formData.append("file", audioFile);
+    formData.append("model", "whisper-1");
+    const response = await fetch(
+      "https://api.openai.com/v1/audio/transcriptions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${key1}`,
+        },
+        body: formData,
+      }
+    );
+    const data = await response.json();
+    console.log(data.text)
+    return data.text;
+  } catch (error) {
+    console.error("Error during transcription:", error);
+  }
+};
+
 function AudioLevelMeter() {
   const [isActive, setisActive] = useState(true);
   const [isTranscribing, setIsTranscribing] = useState(false);
@@ -36,36 +62,39 @@ function AudioLevelMeter() {
   const SILENCE_THRESHOLD = 1;
   const SILENCE_DURATION = 2000; // 1 second in milliseconds
 
-  const handleGenerativeResponseVoice = async (prompt, response) => {
-    console.log(prompt, response);
+  const handleGenerativeResponseVoice = async (response) => {
+   
     const textChunks = response.trim().split("\n");
     const playAudioChunks = async (chunks, index = 0) => {
       if (index >= chunks.length) return setIsSpeaking(false);
       setIsSpeaking(true);
       setIsTranscribing(false);
-      const ttsResponse = await fetch(
-        "https://api.openai.com/v1/audio/speech",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${key1}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "tts-1",
-            input: chunks[index],
-            voice: "alloy",
-          }),
-        }
-      );
-      if (!ttsResponse.ok) {
-        const errorDetails = await ttsResponse.json();
-        setIsSpeaking(false);
-        throw new Error(
-          `TTS API request failed: ${ttsResponse.statusText} - ${errorDetails.error.message}`
+      try {
+        const ttsResponse = await fetch(
+          "https://api.openai.com/v1/audio/speech",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${key1}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "tts-1",
+              input: chunks[index],
+              voice: "alloy",
+            }),
+          }
         );
+        
+        if (!ttsResponse.ok) {
+          const errorDetails = await ttsResponse.json();
+          console.log(
+            `TTS API request failed: ${ttsResponse.statusText} - ${errorDetails.error.message}`
+          );
+        }
+      } catch (error) {
+        console.log(error)
       }
-
       const ttsBlob = await ttsResponse.blob();
       const audioUrl = URL.createObjectURL(ttsBlob);
       const audioElement = new Audio(audioUrl);
@@ -108,7 +137,7 @@ function AudioLevelMeter() {
             mediaRecorderRef.current.onstop = () => {
               if (chunkz.length > 0) {
                 const audioBlob = new Blob(chunkz, { type: "audio/webm" });
-                handleTranscription(audioBlob);
+                handleGeminiText(audioBlob);
                 chunkz = [];
               }
             };
@@ -185,40 +214,33 @@ function AudioLevelMeter() {
     }
   }, [isRecording, isSpeaking]);
 
-  const handleTranscription = async (audioBlob) => {
+  const handleGeminiText = async (audioBlob) => {
     setIsTranscribing(true);
     setisActive(false);
-    const audioFile = new File([audioBlob], "audio.webm", {
-      type: "audio/webm",
-    });
-    const formData = new FormData();
-    formData.append("audioBlob", audioFile);
-    formData.append("prompt", "test");
-    formData.append(
-      "history",
-      localStorage.getItem("ChatHistory")
-        ? JSON.parse(localStorage.getItem("ChatHistory"))
-        : []
-    );
-    formData.append("mimeType", "webm");
-    formData.append("model", "whisper-1");
+    const transcription = await handleTranscription(audioBlob);
     try {
       const chatResponse = await fetch(
-        "http://localhost:2020/conversation/voice",
+        "http://localhost:2020/conversation/chat",
         {
           method: "POST",
           headers: {
             Accept: "application/json",
+            "Content-Type": "application/json",
           },
-          body: formData,
+          body: JSON.stringify({
+            prompt: transcription,
+            history: localStorage.getItem("ChatHistory")
+              ? JSON.parse(localStorage.getItem("ChatHistory"))
+              : [],
+          }),
         }
       );
       const res = await chatResponse.json();
-      console.log(res.response);
-      const data = JSON.parse(res.response.replace(/```|json/g, ""));
-      console.log(data);
+      console.log(res);
+
+      updateChatHistory(transcription, res.response)
       setIsTranscribing(false);
-      handleGenerativeResponseVoice(data.prompt, data.model);
+      handleGenerativeResponseVoice(res.response);
     } catch (error) {
       console.error("Error during transcription:", error);
       setIsTranscribing(false);
