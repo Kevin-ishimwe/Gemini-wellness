@@ -1,5 +1,8 @@
-import ActivitySummaryChart from "../../components/charts/ActivitySummaryChart";
 import React, { useState, useEffect } from "react";
+import SideNavRight from "../../components/charts/sideNavRight";
+import ActivitySummaryChart from "../../components/charts/ActivitySummaryChart";
+
+
 
 function Activity() {
   const [user, setUser] = useState(null);
@@ -62,12 +65,12 @@ function Activity() {
       alert("Failed to update activity. Please try again.");
     }
   };
-
+//console.log(user.physicalActivity)
   return (
     <div className="flex w-screen h-screen  items-center overflow-y-auto">
       {user && (
-        <div className="w-full mx-4 max-w-[50em] ">
-            <div className="mt-[5em]"></div>
+        <div className="w-full mx-4 ">
+          <div className="mt-[5em]"></div>
           <ActivitySummaryChart physicalActivity={user.physicalActivity} />
           <div className=" bg-white rounded-lg shadow-md p-6 mt-4">
             <h2 className="text-2xl font-bold mb-4">Add Activity</h2>
@@ -147,7 +150,10 @@ function Activity() {
           </div>
         </div>
       )}
-      <div className="flex flex-col p-4 w-[30em] bg-white h-[90vh] rounded-lg shadow-sm overflow-y-auto overflow-x-auto mr-4"></div>
+      <SideNavRight
+        title={"Activity analysis Report"}
+        prompt_data={user?.physicalActivity}
+      />
     </div>
   );
 }

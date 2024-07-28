@@ -30,10 +30,6 @@ function HealthTrack() {
         body: JSON.stringify({ userData: userData }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch health analysis");
-      }
-
       const res = await response.json();
       setHealthAnalysis(JSON.parse(clean(res.data)));
     } catch (error) {
