@@ -13,7 +13,8 @@ import ChatTherapy from "./pages/ChatTherapy";
 import HealthTrack from "./pages/HealthTrack";
 import SideNav from "./components/NavHealth";
 import Activity from "./pages/TrackPages/Activity";
-
+import SleepPage from "./pages/TrackPages/Sleep";
+import Nutrition from "./pages/TrackPages/Nutrition";
 
 function App() {
   return (
@@ -70,6 +71,8 @@ function App() {
                 <Routes>
                   <Route path="/" element={<HealthTrack />} />
                   <Route path="/Activity" element={<Activity />} />
+                  <Route path="/sleep" element={<SleepPage />} />
+                  <Route path="/nutrition" element={<Nutrition />} />
                   <Route path="/*" element={<HealthTrack />} />
                 </Routes>
               </div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus } from "react-icons/fa";
 import NutritionChart from "../components/charts/Nutrition";
 import ActivitySummaryChart from "../components/charts/ActivitySummaryChart";
 import SleepChart from "../components/charts/SleepChart";
@@ -7,6 +6,8 @@ import VitalSignsChart from "../components/charts/VitalityChart";
 import GoalsChart from "../components/charts/GoalsChart";
 import WeightTrackerChart from "../components/charts/WeightTrackerChart";
 import logo from "../assets/logo.png";
+import SideNavRight from "../components/charts/sideNavRight";
+
 function HealthTrack() {
   const [user, setUser] = useState(null);
   const [healthAnalysis, setHealthAnalysis] = useState(null);
@@ -106,51 +107,7 @@ function HealthTrack() {
             </div>
           </>
         ) : (
-          <div className="">
-            <div className="mb-4 bg-indigo-100 px-4 py-2 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">Summary</h3>
-              <p>{healthAnalysis.summary}</p>
-            </div>
-
-            <div className="mb-4 bg-purple-100 px-4 py-2 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">Correlations</h3>
-              <ul className="list-disc pl-5">
-                {healthAnalysis.correlations.map((correlation, index) => (
-                  <li key={index}>{correlation}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-4 bg-yellow-100 px-4 py-2 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">New Goals</h3>
-              <ul className="list-disc pl-5">
-                {healthAnalysis.newGoals.map((goal, index) => (
-                  <li key={index}>{goal}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-4 bg-green-100 px-4 py-2 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">Recommendations</h3>
-              {Object.entries(healthAnalysis.recommendations).map(
-                ([key, value]) => (
-                  <div key={key} className="mb-2">
-                    <h4 className="font-medium capitalize">{key}</h4>
-                    <p>{value}</p>
-                  </div>
-                )
-              )}
-            </div>
-
-            <div className="mb-4 bg-red-100 px-4 py-2 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">Risks</h3>
-              <ul className="list-disc pl-5">
-                {healthAnalysis.risks.map((risk, index) => (
-                  <li key={index}>{risk}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <SideNavRight title={"Gemini Health Report"} main={healthAnalysis} />
         )}
       </div>
     </>

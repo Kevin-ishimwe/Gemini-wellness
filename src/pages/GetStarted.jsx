@@ -27,12 +27,12 @@ const services = [
 
 const GetStarted = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="min-h-screen flex flex-wrap flex-col items-center justify-center w-screen">
       <NavLink to={"/"}>
         <Logo_max orientation={true} />
       </NavLink>
       <p className="text-lg my-4"> what service can we help with you with?</p>
-      <div className=" flex my-12">
+      <div className=" flex my-12 flex-wrap">
         {services.map((service, index) => (
           <div
             key={index}

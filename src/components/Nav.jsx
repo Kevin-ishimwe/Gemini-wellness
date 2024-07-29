@@ -15,6 +15,7 @@ function Nav() {
     { text: "Contact", link: "/contact" },
   ];
   const menuHandler = () => (menu ? setmenu(false) : setmenu(true));
+  const closeMenu = () => setmenu(false);
   return (
     <>
       <div className="h-[5em] flex justify-between items-center bg-white py-2 px-4 fixed w-full shadow-[0px_2px_40px_#2121210d] rounded-b-[10px] z-[100]">
@@ -25,15 +26,16 @@ function Nav() {
             <NavLink
               key={link}
               to={link}
+              onClick={closeMenu}
               className=" p-4 text-gray-700 hover:text-indigo-500 px-4 flex items-center  lg:h-[100%] border-b-2 border-white hover:border-indigo-500"
             >
               {text}
             </NavLink>
           ))}
           <div className="flex-col flex lg:flex-row lg:items-center mt-4  lg:mt-0">
-           
             <NavLink
               to={"/login"}
+              onClick={closeMenu}
               className=" mt-4  lg:mt-0 bg-indigo-600 text-white py-2 px-12 mx-2 rounded-full hover:bg-indigo-800 border-2 border-indigo-600 text-lg"
             >
               Login
@@ -62,6 +64,7 @@ function Nav() {
           <NavLink
             key={link}
             to={link}
+            onClick={closeMenu}
             className=" p-4 text-gray-700 hover:text-indigo-500 px-4 flex items-center  lg:h-[100%] border-b-2 border-white hover:border-indigo-500"
           >
             {text}
@@ -70,6 +73,7 @@ function Nav() {
         <div className="flex-col flex lg:flex-row lg:items-center mt-4  lg:mt-0">
           <NavLink
             to={"/login"}
+            onClick={closeMenu}
             className=" mt-4  text-center lg:mt-0 bg-indigo-600 text-white py-2 px-8 mx-2 rounded-full hover:bg-indigo-800 border-2 border-indigo-600"
           >
             Login

@@ -126,7 +126,7 @@ function ChatTherapy() {
                 {demo.map((item, index) => (
                   <div
                     key={index}
-                    className="mx-4 w-fit md:w-[16em] h-[12em] bg-white md:mx-12 rounded-[20px] p-8 py-12 shadow-[1px_10px_40px_#e9e9e93d] hover:shadow-[1px_10px_30px_#1C0AE51C] hover:scale-105 text-indigo-500 flex items-center"
+                    className="text-[0.8em] p-4 py-2 my-2 mx-2 w-fit md:w-[16em] h-[12em] bg-white md:mx-12 rounded-[20px] md:p-8 md:py-12 shadow-[1px_10px_40px_#e9e9e93d] hover:shadow-[1px_10px_30px_#1C0AE51C] hover:scale-105 text-indigo-500 flex items-center"
                   >
                     {item}
                   </div>

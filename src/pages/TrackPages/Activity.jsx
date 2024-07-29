@@ -54,7 +54,7 @@ function Activity() {
           }),});
       if (response.ok) {
         const updatedUser = await response.json();
-        setUser(updatedUser);
+        setUser(updatedUser.data);
         localStorage.setItem("user_data", JSON.stringify(updatedUser.data));
         alert("Activity updated successfully!");
       } else {
@@ -65,7 +65,6 @@ function Activity() {
       alert("Failed to update activity. Please try again.");
     }
   };
-//console.log(user.physicalActivity)
   return (
     <div className="flex w-screen h-screen  items-center overflow-y-auto">
       {user && (
