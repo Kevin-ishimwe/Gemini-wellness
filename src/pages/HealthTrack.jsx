@@ -86,30 +86,25 @@ function HealthTrack() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col p-4 w-[30em] bg-white h-[90vh] mr-2 rounded-lg shadow-sm overflow-y-auto overflow-x-auto">
-        <h2 className="text-xl font-bold mb-4 text-primary-200 text-center p-4 shadow-[0px_2px_20px_#dadada] rounded-lg">
-          Gemini Health Report
-        </h2>
 
-        {healthAnalysis == null ? (
-          <>
-            <div className="w-full h-[90vh] flex items-center ">
-              <div className=" w-full h-[20em] flex items-center flex-col">
-                <img
-                  src={logo}
-                  className="w-[6em] border-[3px] border-b-[#189fe3] border-r-[#189fe3] border-t-[#9d79c6] border-l-[#9d79c6] rounded-full mb-4 animate-spin"
-                  alt=""
-                />
-                <h1 className="text-center w-full text-2xl font-black text-primary-100 animate-pulse">
-                  Analysing Data
-                </h1>
-              </div>
+      {healthAnalysis == null ? (
+        <>
+          <div className="w-full h-[90vh] flex items-center ">
+            <div className=" w-full h-[20em] flex items-center flex-col">
+              <img
+                src={logo}
+                className="w-[6em] border-[3px] border-b-[#189fe3] border-r-[#189fe3] border-t-[#9d79c6] border-l-[#9d79c6] rounded-full mb-4 animate-spin"
+                alt=""
+              />
+              <h1 className="text-center w-full text-2xl font-black text-primary-100 animate-pulse">
+                Analysing Data
+              </h1>
             </div>
-          </>
-        ) : (
-          <SideNavRight title={"Gemini Health Report"} main={healthAnalysis} />
-        )}
-      </div>
+          </div>
+        </>
+      ) : (
+        <SideNavRight title={"Gemini Health Report"} main={healthAnalysis} />
+      )}
     </>
   );
 }

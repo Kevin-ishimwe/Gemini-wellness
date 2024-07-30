@@ -15,6 +15,10 @@ import SideNav from "./components/NavHealth";
 import Activity from "./pages/TrackPages/Activity";
 import SleepPage from "./pages/TrackPages/Sleep";
 import Nutrition from "./pages/TrackPages/Nutrition";
+import WeightManagement from "./pages/TrackPages/Weight";
+import VitalSigns from "./pages/TrackPages/VitalSigns";
+import Medications from "./pages/TrackPages/Medication";
+import GoalsManagement from "./pages/TrackPages/GoalsManagement";
 
 function App() {
   return (
@@ -73,6 +77,10 @@ function App() {
                   <Route path="/Activity" element={<Activity />} />
                   <Route path="/sleep" element={<SleepPage />} />
                   <Route path="/nutrition" element={<Nutrition />} />
+                  <Route path="/weight" element={<WeightManagement />} />
+                  <Route path="/vitals" element={<VitalSigns />} />
+                  <Route path="/Medications" element={<Medications />} />
+                  <Route path="/goals" element={<GoalsManagement />} />
                   <Route path="/*" element={<HealthTrack />} />
                 </Routes>
               </div>

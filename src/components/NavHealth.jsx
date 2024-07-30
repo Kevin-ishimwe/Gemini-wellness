@@ -19,7 +19,7 @@ function SideNav() {
   const iconStyle = `text-2xl  text-[#07408b] ${fold ? "mr-0" : "mr-3"}`;
   const items = [
     {
-      link: "/health/Dashboard",
+      link: "/health/",
       name: "Dashboard",
       icon: <FaHome className={iconStyle} />,
     },

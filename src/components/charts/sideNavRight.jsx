@@ -34,8 +34,7 @@ function SideNavRight({ title, prompt_data = null, main = null }) {
     }
   }, [prompt_data]);
   return (
-
-    <div className="min-w-[25em] p-4 w-full h-[90vh] rounded-lg shadow-sm overflow-y-auto overflow-x-auto mr-4 bg-white max-w-[30em]">
+    <div className="min-w-[25em] p-4 h-[90vh] rounded-lg shadow-sm overflow-y-auto overflow-x-auto mr-4 bg-white max-w-[30em]">
       <h2 className="text-xl font-bold mb-4 text-primary-200 text-center p-4 rounded-lg">
         {title}
       </h2>
