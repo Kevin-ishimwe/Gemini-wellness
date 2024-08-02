@@ -38,7 +38,6 @@ function HealthTrack() {
     }
   };
 
-  console.log(user?.nutrition);
   if (!user)
     return (
       <div className=" h-[100vh] w-full flex items-center justify-center">

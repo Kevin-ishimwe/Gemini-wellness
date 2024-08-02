@@ -4,35 +4,94 @@ import logo from "../../assets/logo.png";
 import { useEffect, useState } from "react";
 function SideNavRight({ title, prompt_data = null, main = null }) {
   const [healthAnalysis, setHealthAnalysis] = useState(null);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [inputText, setInputText] = useState("");
+
   useEffect(() => {
     if (prompt_data && main == null) {
       try {
-        const response = fetch(
-          "http://localhost:2020/health/analysis/specific",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userData: prompt_data }),
-          }
-        )
+        fetch("http://localhost:2020/health/analysis/specific", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userData: prompt_data }),
+        })
           .then((res) => res.json())
           .then((data) => {
             const clean = JSON.parse(
               data.data.replace("```json", "").replace("```", "")
             );
-            console.log(clean);
             setHealthAnalysis(clean);
+            setChatHistory([
+              {
+                role: "user",
+                parts: [
+                  {
+                    text:
+                      "Hello, analyze my data and put result in json" +
+                      prompt_data,
+                  },
+                ],
+              },
+              {
+                role: "model",
+                parts: [{ text: "sure here you go" + data }],
+              },
+            ]);
           });
       } catch (error) {
         console.log(error);
       }
     } else if (main) {
-      console.log(main);
       setHealthAnalysis(main);
     }
   }, [prompt_data]);
+
+  const handleChat = async (message) => {
+    try {
+      const response = await fetch("http://localhost:2020/conversation/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: message,
+          history: chatHistory,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.response) {
+        console.log(data.response)
+        setChatHistory((prev) => [
+          ...prev,
+          { role: "user", parts: [{ text: message }] },
+          { role: "model", parts: [{ text: data.response }] },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
+  };
+
+  const handleSendMessage = async () => {
+    if (inputText.trim()) {
+      await handleChat(inputText);
+      setInputText("");
+    }
+  };
+
+  const handleKeyPress = async (e) => {
+    if (e.key === "Enter") {
+      await handleSendMessage();
+    }
+  };
   return (
     <div className="min-w-[25em] p-4 h-[90vh] rounded-lg shadow-sm overflow-y-auto overflow-x-auto mr-4 bg-white max-w-[30em]">
       <h2 className="text-xl font-bold mb-4 text-primary-200 text-center p-4 rounded-lg">
@@ -118,18 +177,23 @@ function SideNavRight({ title, prompt_data = null, main = null }) {
       <div className="bottom-0 sticky flex ">
         <input
           type="text"
+          value={inputText}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          placeholder="Type your question..."
           className=" px-12 py-[1.2em] w-full focus:outline-none rounded-full   bg-[#fcfcfc] shadow-[0px_2px_10px_#2121]"
         />
         <div className="flex absolute right-0 items-center mt-2">
           <IoTrashSharp
             className="text-[3em] text-indigo-500 hover:bg-indigo-100 py-2 px-3 rounded-full"
             onClick={() => {
-              setPopupVisible(!popupVisible);
+              setChatHistory([]);
+              setHealthAnalysis(null);
             }}
           />
           <VscSend
             className="text-[3em] mr-4 text-indigo-500 hover:bg-indigo-100 py-2 px-3 rounded-full"
-            onClick={() => handleChat}
+            onClick={handleSendMessage}
           />
         </div>
       </div>

@@ -4,6 +4,7 @@ import { VscSend } from "react-icons/vsc";
 import { IoTrashSharp } from "react-icons/io5";
 import { updateChatHistory } from "../components/AudioMeter";
 import TherapyMenu from "../components/TherapyMenu";
+
 function Logo_max({ orientation }) {
   return (
     <div
