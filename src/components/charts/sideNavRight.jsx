@@ -64,7 +64,7 @@ function SideNavRight({ title, prompt_data = null, main = null }) {
       const data = await response.json();
 
       if (data.response) {
-        console.log(data.response)
+        console.log(data.response);
         setChatHistory((prev) => [
           ...prev,
           { role: "user", parts: [{ text: message }] },
@@ -173,7 +173,22 @@ function SideNavRight({ title, prompt_data = null, main = null }) {
           </div>
         </div>
       )}
-
+      {chatHistory?.map((item, index) =>
+        item.role == "model" ? (
+          <div
+            key={index}
+            className="bg-white my-4 px-4 py-4 md:max-w-[40vw] rounded-lg text-gray-600"
+          >
+            {item.parts[0].text}
+          </div>
+        ) : (
+          <div key={index} className="flex justify-end w-full ">
+            <div className="bg-indigo-600 px-4 py-4 max-w-[60vw] text-white rounded-lg min-w-[20vw]">
+              {item.parts[0].text}
+            </div>
+          </div>
+        )
+      )}
       <div className="bottom-0 sticky flex ">
         <input
           type="text"

@@ -61,7 +61,7 @@ function SideNav() {
   ];
 
   return (
-    <div >
+    <div>
       <div
         className=" bg-white z-[100] flex flex-col h-[98vh] items-center shadow-[0_0_5px_#c6c6e6] rounded-[1em] mt-[1vh] ml-2 "
         style={{
@@ -75,13 +75,16 @@ function SideNav() {
           setfold(true);
         }}
       >
-        <div className="my-2 bg-white py-3 w-[80%] grid  rounded-xl h-[5em] ">
+        <NavLink
+          to={"/getstarted"}
+          className="my-2 bg-white py-3 w-[80%] grid  rounded-xl h-[5em] "
+        >
           {fold ? (
             <img className="h-full object-contain" src={logo} />
           ) : (
             <Logo_max size={"1.4em"} orientation={true} />
           )}
-        </div>
+        </NavLink>
         <ul className="grid w-[90%] px-[2%] bg-[#6cbdff09] rounded-xl py-8">
           {items.map(({ link, name, icon }) => {
             return (
