@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
+import { SiActigraph } from "react-icons/si";
+import { RiMentalHealthFill } from "react-icons/ri";
 import {
   FaComments,
   FaMicrophone,
-  FaCogs,
   FaUser,
   FaHeart,
   FaQuestionCircle,
@@ -21,18 +22,13 @@ const settings = [
   },
   {
     option: "Voice",
-    icon: <FaMicrophone className={style} />,
+    icon: <RiMentalHealthFill className={style} />,
     path: "/therapy/voice",
-  },
-  {
-    option: "Preference",
-    icon: <FaCogs className={style} />,
-    path: "/preference",
   },
   { option: "Profile", icon: <FaUser className={style} />, path: "/profile" },
   {
-    option: "Wellness",
-    icon: <FaHeart className={style} />,
+    option: "Health Track",
+    icon: <SiActigraph  className={style} />,
     path: "/wellness",
   },
   {
@@ -49,7 +45,7 @@ const settings = [
 function TherapyMenu({ fixed }) {
   const [menu, setmenu] = useState(false);
   return (
-    <div className="flex items-center ">
+    <div className="flex items-center bg-white ">
       <div className="mt-[5vh] flex justify-between px-[10vw] absolute top-0 left-0 w-full">
         <div className="relative inline-block group">
           <IoMdInformationCircleOutline className="text-4xl text-indigo-800 cursor-pointer" />

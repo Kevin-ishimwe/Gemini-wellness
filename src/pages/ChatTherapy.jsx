@@ -4,6 +4,7 @@ import { VscSend } from "react-icons/vsc";
 import { IoTrashSharp } from "react-icons/io5";
 import { updateChatHistory } from "../components/AudioMeter";
 import TherapyMenu from "../components/TherapyMenu";
+import { NavLink } from "react-router-dom";
 
 function Logo_max({ orientation }) {
   return (
@@ -118,8 +119,10 @@ function ChatTherapy() {
       )}
       <div className="bg-[#F9F9F9] relative">
         <div className="w-[full] z-[12] top-0 relative">
-          <Logo_max orientation={true} />
-          <div className="flex ">
+          <NavLink to={"/getstarted"}>
+            <Logo_max orientation={true} />
+          </NavLink>
+          <div className="flex justify-end">
             {messages?.length > 0 ? (
               ""
             ) : (
@@ -134,7 +137,9 @@ function ChatTherapy() {
                 ))}
               </div>
             )}
-            <TherapyMenu />
+            <div className="">
+              <TherapyMenu />
+            </div>
           </div>
         </div>
         <div className=" mx-auto px-4 pb-[10em] mt-12">

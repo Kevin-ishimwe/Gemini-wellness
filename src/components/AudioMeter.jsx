@@ -24,11 +24,12 @@ export const updateChatHistory = (userPrompt, modelResponse) => {
 const handleTranscription = async (audioBlob) => {
   try {
     const formData = new FormData();
-    const audioFile = new File([audioBlob], "audio.webm", {
-      type: "audio/webm",
+    const audioFile = new File([audioBlob], "audio.mp3", {
+      type: "audio/mpeg",
     });
     formData.append("file", audioFile);
     formData.append("model", "whisper-1");
+    console.log(audioBlob);
     const response = await fetch(
       "https://api.openai.com/v1/audio/transcriptions",
       {
@@ -40,7 +41,7 @@ const handleTranscription = async (audioBlob) => {
       }
     );
     const data = await response.json();
-    console.log(data.text)
+    console.log(data.text);
     return data.text;
   } catch (error) {
     console.error("Error during transcription:", error);
@@ -59,42 +60,40 @@ function AudioLevelMeter() {
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
   const silenceTimerRef = useRef(null);
-  const SILENCE_THRESHOLD = 1;
+  const SILENCE_THRESHOLD = 0.8;
   const SILENCE_DURATION = 2000; // 1 second in milliseconds
 
   const handleGenerativeResponseVoice = async (response) => {
-   
-    const textChunks = response.trim().split("\n");
+    const textChunks = response.trim().replace("\n","").split(".");
+    console.log("#############",textChunks);
     const playAudioChunks = async (chunks, index = 0) => {
       if (index >= chunks.length) return setIsSpeaking(false);
       setIsSpeaking(true);
       setIsTranscribing(false);
-      try {
-        const ttsResponse = await fetch(
-          "https://api.openai.com/v1/audio/speech",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${key1}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "tts-1",
-              input: chunks[index],
-              voice: "alloy",
-            }),
-          }
-        );
-        
-        if (!ttsResponse.ok) {
-          const errorDetails = await ttsResponse.json();
-          console.log(
-            `TTS API request failed: ${ttsResponse.statusText} - ${errorDetails.error.message}`
-          );
+
+      const ttsResponse = await fetch(
+        "https://api.openai.com/v1/audio/speech",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${key1}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "tts-1",
+            input: chunks[index],
+            voice: "alloy",
+          }),
         }
-      } catch (error) {
-        console.log(error)
+      );
+
+      if (!ttsResponse.ok) {
+        const errorDetails = await ttsResponse.json();
+        console.log(
+          `TTS API request failed: ${ttsResponse.statusText} - ${errorDetails.error.message}`
+        );
       }
+
       const ttsBlob = await ttsResponse.blob();
       const audioUrl = URL.createObjectURL(ttsBlob);
       const audioElement = new Audio(audioUrl);
@@ -237,10 +236,11 @@ function AudioLevelMeter() {
       );
       const res = await chatResponse.json();
       console.log(res);
-
-      updateChatHistory(transcription, res.response)
-      setIsTranscribing(false);
-      handleGenerativeResponseVoice(res.response);
+      if (res.status == "success") {
+        updateChatHistory(transcription, res.response);
+        setIsTranscribing(false);
+        handleGenerativeResponseVoice(res.response);
+      }
     } catch (error) {
       console.error("Error during transcription:", error);
       setIsTranscribing(false);

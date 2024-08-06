@@ -80,7 +80,7 @@ const SubHero = () => {
       <img
         src={vwaves}
         alt=""
-        className="upside w-screen bottom-[-5em] lg:bottom-[-15em] absolute left-0 z-[-10]"
+        className="upside w-screen bottom-[-5em] lg:bottom-[-14em] absolute left-0 z-[-10]"
       />
     </div>
   );
