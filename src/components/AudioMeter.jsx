@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import AudioVisualizer from "./AudioVisualizer";
 import { FaMicrophone } from "react-icons/fa";
+import { useFetcher } from "react-router-dom";
 
 const key1 = import.meta.env.VITE_OPENAI_API_KEY;
 
@@ -25,7 +26,7 @@ const handleTranscription = async (audioBlob) => {
   try {
     const formData = new FormData();
     const audioFile = new File([audioBlob], "audio.mp3", {
-      type: "audio/mpeg",
+      type: "audio/mp3",
     });
     formData.append("file", audioFile);
     formData.append("model", "whisper-1");
@@ -47,25 +48,33 @@ const handleTranscription = async (audioBlob) => {
     console.error("Error during transcription:", error);
   }
 };
-
+const safariCheck = () =>
+  /constructor/i.test(window.HTMLElement) ||
+  (function (p) {
+    return p.toString() === "[object SafariRemoteNotification]";
+  })(
+    !window["safari"] ||
+      (typeof safari !== "undefined" && window["safari"].pushNotification)
+  );
 function AudioLevelMeter() {
-  const [isActive, setisActive] = useState(true);
+  const [isActive, setisActive] = useState(!true);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [isSafari, setisSafari] = useState(safariCheck());
   // Refs
   const mediaRecorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
   const silenceTimerRef = useRef(null);
-  const SILENCE_THRESHOLD = 0.8;
-  const SILENCE_DURATION = 2000; // 1 second in milliseconds
-
+  const SILENCE_THRESHOLD= useRef(isSafari ? 0.65 : 1);
+  const SILENCE_DURATION = useRef( 1000); // 1 second in milliseconds
+  console.log(isSafari, SILENCE_DURATION.current, SILENCE_THRESHOLD.current);
   const handleGenerativeResponseVoice = async (response) => {
-    const textChunks = response.trim().replace("\n","").split(".");
-    console.log("#############",textChunks);
+    const textChunks = response.trim().replace("\n", "").split(".");
+    console.log("#############", textChunks);
     const playAudioChunks = async (chunks, index = 0) => {
       if (index >= chunks.length) return setIsSpeaking(false);
       setIsSpeaking(true);
@@ -86,28 +95,29 @@ function AudioLevelMeter() {
           }),
         }
       );
-
-      if (!ttsResponse.ok) {
-        const errorDetails = await ttsResponse.json();
-        console.log(
-          `TTS API request failed: ${ttsResponse.statusText} - ${errorDetails.error.message}`
-        );
-      }
-
-      const ttsBlob = await ttsResponse.blob();
-      const audioUrl = URL.createObjectURL(ttsBlob);
-      const audioElement = new Audio(audioUrl);
-      audioElement.play();
-      audioElement.addEventListener("ended", () => {
+      if (ttsResponse.status == 200) {
+        const ttsBlob = await ttsResponse.blob();
+        const audioUrl = URL.createObjectURL(ttsBlob);
+        const audioElement = new Audio(audioUrl);
+        audioElement.play();
+        audioElement.addEventListener("ended", () => {
+          if (index === chunks.length - 1) {
+            setisActive(true);
+            console.log("All audio chunks have finished playing");
+          }
+          playAudioChunks(chunks, index + 1);
+        });
+      } else {
         if (index === chunks.length - 1) {
           setisActive(true);
           console.log("All audio chunks have finished playing");
         }
         playAudioChunks(chunks, index + 1);
-      });
+      }
     };
     playAudioChunks(textChunks);
   };
+
   useEffect(() => {
     try {
       navigator.mediaDevices
@@ -122,20 +132,15 @@ function AudioLevelMeter() {
                 mimeType: "audio/webm",
               });
             } catch (err) {
-              mediaRecorderRef.current = new MediaRecorder(stream, {
-                mimeType: "video/mp4",
-              });
+              mediaRecorderRef.current = new MediaRecorder(stream);
             }
             let chunkz = [];
             mediaRecorderRef.current.ondataavailable = (e) => {
-              console.log(e.data.size);
-              if (e.data.size > 20000) {
-                chunkz.push(e.data);
-              }
+              chunkz.push(e.data);
             };
             mediaRecorderRef.current.onstop = () => {
               if (chunkz.length > 0) {
-                const audioBlob = new Blob(chunkz, { type: "audio/webm" });
+                const audioBlob = new Blob(chunkz, { type: "audio/mp4" });
                 handleGeminiText(audioBlob);
                 chunkz = [];
               }
@@ -186,7 +191,7 @@ function AudioLevelMeter() {
     const normalizedAverage = average / 70;
     setAudioLevel(normalizedAverage);
 
-    if (normalizedAverage > SILENCE_THRESHOLD) {
+    if (normalizedAverage > SILENCE_THRESHOLD.current) {
       setIsRecording(true);
       if (silenceTimerRef.current) {
         clearTimeout(silenceTimerRef.current);
@@ -197,7 +202,7 @@ function AudioLevelMeter() {
       silenceTimerRef.current = setTimeout(() => {
         setIsRecording(false);
         silenceTimerRef.current = null;
-      }, SILENCE_DURATION);
+      }, SILENCE_DURATION.current);
     }
 
     animationFrameRef.current = requestAnimationFrame(measureAudioLevel);
