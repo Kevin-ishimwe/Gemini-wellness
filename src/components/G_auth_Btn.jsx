@@ -2,6 +2,8 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 
+const backend_url = import.meta.env.BACKEND_URL;
+
 function G_auth_Btn({ setislogin }) {
   const navigate = useNavigate();
   const googleLogin = useGoogleLogin({
@@ -16,7 +18,7 @@ function G_auth_Btn({ setislogin }) {
         const userData = await userInfo.json();
         console.log(await userData);
         const response = await fetch(
-          "http://localhost:2020/user/auth/complete",
+          `${backend_url}/user/auth/complete`,
           {
             method: "POST",
             headers: {

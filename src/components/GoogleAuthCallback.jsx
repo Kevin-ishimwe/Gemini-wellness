@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+const backend_url = import.meta.env.BACKEND_URL;
+
 function GoogleAuthCallback() {
   const navigate = useNavigate();
 
@@ -8,7 +10,7 @@ function GoogleAuthCallback() {
     const fetchAuthData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:2020/user/auth/complete",
+          `${backend_url}/user/auth/complete`,
           {
             method: "GET",
             credentials: "include", // This is important for including cookies if you're using sessions

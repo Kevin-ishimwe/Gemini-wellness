@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SideNavRight from "../../components/charts/sideNavRight";
 import ActivitySummaryChart from "../../components/charts/ActivitySummaryChart";
 
-
+const backend_url = import.meta.env.BACKEND_URL;
 
 function Activity() {
   const [user, setUser] = useState(null);
@@ -26,32 +26,32 @@ function Activity() {
     if (!user) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:2020/user/update/${user._id}`,{
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
+      const response = await fetch(`${backend_url}/user/update/${user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          physicalActivity: {
+            steps: [
+              ...user.physicalActivity.steps,
+              { date: new Date(), count: activityData.steps },
+            ],
+            distance: [
+              ...user.physicalActivity.distance,
+              { date: new Date(), kilometers: activityData.distance },
+            ],
+            caloriesBurned: [
+              ...user.physicalActivity.caloriesBurned,
+              { date: new Date(), amount: activityData.caloriesBurned },
+            ],
+            activeMinutes: [
+              ...user.physicalActivity.activeMinutes,
+              { date: new Date(), minutes: activityData.activeMinutes },
+            ],
           },
-          body: JSON.stringify({
-            physicalActivity: {
-              steps: [
-                ...user.physicalActivity.steps,
-                { date: new Date(), count: activityData.steps },
-              ],
-              distance: [
-                ...user.physicalActivity.distance,
-                { date: new Date(), kilometers: activityData.distance },
-              ],
-              caloriesBurned: [
-                ...user.physicalActivity.caloriesBurned,
-                { date: new Date(), amount: activityData.caloriesBurned },
-              ],
-              activeMinutes: [
-                ...user.physicalActivity.activeMinutes,
-                { date: new Date(), minutes: activityData.activeMinutes },
-              ],
-            },
-          }),});
+        }),
+      });
       if (response.ok) {
         const updatedUser = await response.json();
         setUser(updatedUser.data);

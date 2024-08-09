@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SideNavRight from "../../components/charts/sideNavRight";
+const backend_url = import.meta.env.BACKEND_URL;
 
 function Medications() {
   const [user, setUser] = useState(null);
@@ -28,18 +29,15 @@ function Medications() {
   const addMedication = async () => {
     if (!user) return;
     try {
-      const response = await fetch(
-        `http://localhost:2020/user/update/${user._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            medications: [...medications, newMedication],
-          }),
-        }
-      ).then((res) => res.json());
+      const response = await fetch(`${backend_url}/user/update/${user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          medications: [...medications, newMedication],
+        }),
+      }).then((res) => res.json());
 
       const updatedUser = await response;
       setUser(updatedUser.data);
@@ -64,18 +62,15 @@ function Medications() {
     if (!user) return;
     try {
       const updatedMedications = medications.filter((_, i) => i !== index);
-      const response = await fetch(
-        `http://localhost:2020/user/update/${user._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            medications: updatedMedications,
-          }),
-        }
-      ).then((res) => res.json());
+      const response = await fetch(`${backend_url}/user/update/${user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          medications: updatedMedications,
+        }),
+      }).then((res) => res.json());
 
       const updatedUser = await response;
       setUser(updatedUser.data);

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import AudioVisualizer from "./AudioVisualizer";
 import { FaMicrophone } from "react-icons/fa";
-import { useFetcher } from "react-router-dom";
+
 
 const key1 = import.meta.env.VITE_OPENAI_API_KEY;
-
+const backend_url = import.meta.env.BACKEND_URL;
 export const updateChatHistory = (userPrompt, modelResponse) => {
   const storageKey = "ChatHistory";
   let chatHistory = JSON.parse(localStorage.getItem(storageKey)) || [];
@@ -57,7 +57,7 @@ const safariCheck = () =>
       (typeof safari !== "undefined" && window["safari"].pushNotification)
   );
 function AudioLevelMeter() {
-  const [isActive, setisActive] = useState(!true);
+  const [isActive, setisActive] = useState(true);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(null);
@@ -69,7 +69,7 @@ function AudioLevelMeter() {
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
   const silenceTimerRef = useRef(null);
-  const SILENCE_THRESHOLD= useRef(isSafari ? 0.65 : 1);
+  const SILENCE_THRESHOLD= useRef(isSafari ? 0.65 : 1.2);
   const SILENCE_DURATION = useRef( 1000); // 1 second in milliseconds
   console.log(isSafari, SILENCE_DURATION.current, SILENCE_THRESHOLD.current);
   const handleGenerativeResponseVoice = async (response) => {
@@ -223,22 +223,19 @@ function AudioLevelMeter() {
     setisActive(false);
     const transcription = await handleTranscription(audioBlob);
     try {
-      const chatResponse = await fetch(
-        "http://localhost:2020/conversation/chat",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            prompt: transcription,
-            history: localStorage.getItem("ChatHistory")
-              ? JSON.parse(localStorage.getItem("ChatHistory"))
-              : [],
-          }),
-        }
-      );
+      const chatResponse = await fetch(`${backend_url}/conversation/chat`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: transcription,
+          history: localStorage.getItem("ChatHistory")
+            ? JSON.parse(localStorage.getItem("ChatHistory"))
+            : [],
+        }),
+      });
       const res = await chatResponse.json();
       console.log(res);
       if (res.status == "success") {

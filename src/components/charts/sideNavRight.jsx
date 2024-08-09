@@ -2,6 +2,8 @@ import { VscSend } from "react-icons/vsc";
 import { IoTrashSharp } from "react-icons/io5";
 import logo from "../../assets/logo.png";
 import { useEffect, useState } from "react";
+
+const backend_url = import.meta.env.BACKEND_URL;
 function SideNavRight({ title, prompt_data = null, main = null }) {
   const [healthAnalysis, setHealthAnalysis] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
@@ -10,7 +12,7 @@ function SideNavRight({ title, prompt_data = null, main = null }) {
   useEffect(() => {
     if (prompt_data && main == null) {
       try {
-        fetch("http://localhost:2020/health/analysis/specific", {
+        fetch(`${backend_url}/health/analysis/specific`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +52,7 @@ function SideNavRight({ title, prompt_data = null, main = null }) {
 
   const handleChat = async (message) => {
     try {
-      const response = await fetch("http://localhost:2020/conversation/chat", {
+      const response = await fetch(`${backend_url}/conversation/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

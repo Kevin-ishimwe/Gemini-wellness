@@ -5,6 +5,8 @@ import { FaEye } from "react-icons/fa";
 import G_auth_Btn from "../components/G_auth_Btn";
 import Success from "../components/notification/Success";
 
+const backend_url = import.meta.env.BACKEND_URL;
+
 function Signup() {
   const [islogin, setislogin] = useState(false);
     const [error, setError] = useState("");
@@ -30,7 +32,7 @@ function Signup() {
       return;
     }
     try {
-      const response = await fetch("http://localhost:2020/user/add", {
+      const response = await fetch(`${backend_url}user/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

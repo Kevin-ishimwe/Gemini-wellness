@@ -4,6 +4,8 @@ import { FaEye } from "react-icons/fa";
 import G_auth_Btn from "../components/G_auth_Btn";
 import Success from "../components/notification/Success";
 
+const backend_url = import.meta.env.BACKEND_URL;
+
 const Login = () => {
   const [islogin, setislogin] = useState(false);
   const [error, setError] = useState("");
@@ -18,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch("http://localhost:2020/user/login", {
+      const response = await fetch(`${backend_url }/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

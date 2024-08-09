@@ -6,6 +6,8 @@ import { updateChatHistory } from "../components/AudioMeter";
 import TherapyMenu from "../components/TherapyMenu";
 import { NavLink } from "react-router-dom";
 
+const backend_url = import.meta.env.BACKEND_URL; 
+
 function Logo_max({ orientation }) {
   return (
     <div
@@ -70,7 +72,7 @@ function ChatTherapy() {
     try {
       setmessages((prev) => [...(prev ?? []), { user: prompt }]);
       setprompt("");
-      await fetch("http://localhost:2020/conversation/chat", {
+      await fetch(`${backend_url}/conversation/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

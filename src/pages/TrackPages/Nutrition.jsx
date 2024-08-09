@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SideNavRight from "../../components/charts/sideNavRight";
 import NutritionChart from "../../components/charts/Nutrition";
+const backend_url = import.meta.env.BACKEND_URL;
 
 function Nutrition() {
   const [user, setUser] = useState(null);
@@ -34,31 +35,28 @@ function Nutrition() {
   const addMeal = async () => {
     if (!user) return;
     try {
-      const response = await fetch(
-        `http://localhost:2020/user/update/${user._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
+      const response = await fetch(`${backend_url}/user/update/${user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nutrition: {
+            ...user.nutrition,
+            meals: [
+              ...user.nutrition.meals,
+              {
+                date: new Date(mealData.date),
+                name: mealData.name,
+                calories: parseFloat(mealData.calories),
+                protein: parseFloat(mealData.protein),
+                carbs: parseFloat(mealData.carbs),
+                fats: parseFloat(mealData.fats),
+              },
+            ],
           },
-          body: JSON.stringify({
-            nutrition: {
-              ...user.nutrition,
-              meals: [
-                ...user.nutrition.meals,
-                {
-                  date: new Date(mealData.date),
-                  name: mealData.name,
-                  calories: parseFloat(mealData.calories),
-                  protein: parseFloat(mealData.protein),
-                  carbs: parseFloat(mealData.carbs),
-                  fats: parseFloat(mealData.fats),
-                },
-              ],
-            },
-          }),
-        }
-      ).then((res) => res.json());
+        }),
+      }).then((res) => res.json());
       const updatedUser = await response.data;
       setUser(updatedUser);
       localStorage.setItem("user_data", JSON.stringify(updatedUser.data));
@@ -79,27 +77,24 @@ function Nutrition() {
   const addWaterIntake = async () => {
     if (!user) return;
     try {
-      const response = await fetch(
-        `http://localhost:2020/user/update/${user._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
+      const response = await fetch(`${backend_url}/user/update/${user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nutrition: {
+            ...user.nutrition,
+            waterIntake: [
+              ...user.nutrition.waterIntake,
+              {
+                date: new Date(waterIntake.date),
+                amount: parseFloat(waterIntake.amount),
+              },
+            ],
           },
-          body: JSON.stringify({
-            nutrition: {
-              ...user.nutrition,
-              waterIntake: [
-                ...user.nutrition.waterIntake,
-                {
-                  date: new Date(waterIntake.date),
-                  amount: parseFloat(waterIntake.amount),
-                },
-              ],
-            },
-          }),
-        }
-      ).then((res) => res.json());
+        }),
+      }).then((res) => res.json());
       const updatedUser = await response.data;
       setUser(updatedUser);
       localStorage.setItem("user_data", JSON.stringify(updatedUser.data));
