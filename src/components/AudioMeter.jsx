@@ -4,7 +4,7 @@ import { FaMicrophone } from "react-icons/fa";
 
 
 const key1 = import.meta.env.VITE_OPENAI_API_KEY;
-const backend_url = import.meta.env.BACKEND_URL;
+const backend_url = import.meta.env.VITE_BACKEND_URL;
 export const updateChatHistory = (userPrompt, modelResponse) => {
   const storageKey = "ChatHistory";
   let chatHistory = JSON.parse(localStorage.getItem(storageKey)) || [];
