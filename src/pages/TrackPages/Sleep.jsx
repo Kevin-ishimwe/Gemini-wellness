@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SideNavRight from "../../components/charts/sideNavRight";
 import SleepChart from "../../components/charts/SleepChart";
-const backend_url = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function SleepPage() {
   const [user, setUser] = useState(null);
@@ -27,24 +27,27 @@ function SleepPage() {
     console.log(sleepData);
     if (!user) return;
     try {
-      const response = await fetch(`${backend_url}/user/update/${user._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          sleep: [
-            ...user.sleep,
-            {
-              date: new Date(sleepData.date),
-              duration: parseFloat(sleepData.duration),
-              quality: parseInt(sleepData.quality),
-              bedtime: new Date(sleepData.bedtime),
-              wakeTime: new Date(sleepData.wakeTime),
-            },
-          ],
-        }),
-      }).then((res) => res.json());
+      const response = await fetch(
+        `${VITE_BACKEND_URL}/user/update/${user._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sleep: [
+              ...user.sleep,
+              {
+                date: new Date(sleepData.date),
+                duration: parseFloat(sleepData.duration),
+                quality: parseInt(sleepData.quality),
+                bedtime: new Date(sleepData.bedtime),
+                wakeTime: new Date(sleepData.wakeTime),
+              },
+            ],
+          }),
+        }
+      ).then((res) => res.json());
 
       const updatedUser = await response;
       setUser(updatedUser.data);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SideNavRight from "../../components/charts/sideNavRight";
 import VitalSignsChart from "../../components/charts/VitalityChart";
-const backend_url = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function VitalSigns() {
   const [user, setUser] = useState(null);
@@ -36,27 +36,30 @@ function VitalSigns() {
   const updateVitalSigns = async () => {
     if (!user) return;
     try {
-      const response = await fetch(`${backend_url}/user/update/${user._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          vitalSigns: [
-            ...user.vitalSigns,
-            {
-              date: new Date(vitalData.date),
-              heartRate: parseFloat(vitalData.heartRate),
-              bloodPressure: {
-                systolic: parseFloat(vitalData.bloodPressure.systolic),
-                diastolic: parseFloat(vitalData.bloodPressure.diastolic),
+      const response = await fetch(
+        `${VITE_BACKEND_URL}/user/update/${user._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            vitalSigns: [
+              ...user.vitalSigns,
+              {
+                date: new Date(vitalData.date),
+                heartRate: parseFloat(vitalData.heartRate),
+                bloodPressure: {
+                  systolic: parseFloat(vitalData.bloodPressure.systolic),
+                  diastolic: parseFloat(vitalData.bloodPressure.diastolic),
+                },
+                bodyTemperature: parseFloat(vitalData.bodyTemperature),
+                respiratoryRate: parseFloat(vitalData.respiratoryRate),
               },
-              bodyTemperature: parseFloat(vitalData.bodyTemperature),
-              respiratoryRate: parseFloat(vitalData.respiratoryRate),
-            },
-          ],
-        }),
-      }).then((res) => res.json());
+            ],
+          }),
+        }
+      ).then((res) => res.json());
 
       const updatedUser = await response;
       setUser(updatedUser.data);

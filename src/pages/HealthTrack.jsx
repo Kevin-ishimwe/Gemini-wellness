@@ -8,7 +8,7 @@ import WeightTrackerChart from "../components/charts/WeightTrackerChart";
 import logo from "../assets/logo.png";
 import SideNavRight from "../components/charts/sideNavRight";
 
-const backend_url = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function HealthTrack() {
   const [user, setUser] = useState(null);
@@ -25,7 +25,7 @@ function HealthTrack() {
   };
   const fetchHealthAnalysis = async (userData) => {
     try {
-      const response = await fetch(`${backend_url}/health/analysis`, {
+      const response = await fetch(`${VITE_BACKEND_URL}/health/analysis`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

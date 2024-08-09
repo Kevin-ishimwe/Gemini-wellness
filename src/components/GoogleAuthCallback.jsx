@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const backend_url = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function GoogleAuthCallback() {
   const navigate = useNavigate();
@@ -9,13 +9,10 @@ function GoogleAuthCallback() {
   useEffect(() => {
     const fetchAuthData = async () => {
       try {
-        const response = await fetch(
-          `${backend_url}/user/auth/complete`,
-          {
-            method: "GET",
-            credentials: "include", // This is important for including cookies if you're using sessions
-          }
-        );
+        const response = await fetch(`${VITE_BACKEND_URL}/user/auth/complete`, {
+          method: "GET",
+          credentials: "include", // This is important for including cookies if you're using sessions
+        });
 
         if (!response.ok) {
           throw new Error("Authentication failed");

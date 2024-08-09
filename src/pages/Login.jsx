@@ -4,7 +4,7 @@ import { FaEye } from "react-icons/fa";
 import G_auth_Btn from "../components/G_auth_Btn";
 import Success from "../components/notification/Success";
 
-const backend_url = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
   const [islogin, setislogin] = useState(false);
@@ -15,12 +15,11 @@ const Login = () => {
   });
   const navigate = useNavigate();
 
-
   const loginHandler = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch(`${backend_url }/user/login`, {
+      const response = await fetch(`${VITE_BACKEND_URL}/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +29,7 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       if (data.status === "success") {
         setislogin(true);
         localStorage.setItem("user_token", data.token);
@@ -46,7 +45,7 @@ const Login = () => {
   };
 
   const password = useRef();
- 
+
   const loginwith = [
     {
       icon: <G_auth_Btn setislogin={setislogin} />,
@@ -55,7 +54,7 @@ const Login = () => {
       },
     },
   ];
-  
+
   const handleInputChange = (e) => {
     setForm({
       ...form,

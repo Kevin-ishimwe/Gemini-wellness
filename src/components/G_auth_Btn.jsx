@@ -2,7 +2,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 
-const backend_url = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function G_auth_Btn({ setislogin }) {
   const navigate = useNavigate();
@@ -16,21 +16,14 @@ function G_auth_Btn({ setislogin }) {
           }
         );
         const userData = await userInfo.json();
-        console.log(await userData);
-        const response = await fetch(
-          `${backend_url}/user/auth/complete`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            mode: "cors",
-            body: JSON.stringify({ user: await userData }),
-          }
-        )
-          .then((res) => res.json())
-
-  
+        const response = await fetch(`${VITE_BACKEND_URL}/user/auth/complete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          mode: "cors",
+          body: JSON.stringify({ user: await userData }),
+        }).then((res) => res.json());
 
         const data = await response;
 

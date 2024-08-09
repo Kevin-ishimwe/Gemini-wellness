@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SideNavRight from "../../components/charts/sideNavRight";
 import WeightTrackerChart from "../../components/charts/WeightTrackerChart";
-const backend_url = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function WeightManagement() {
   const [user, setUser] = useState(null);
@@ -37,28 +37,31 @@ function WeightManagement() {
   const updateWeight = async () => {
     if (!user) return;
     try {
-      const response = await fetch(`${backend_url}/user/update/${user._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          weightManagement: [
-            ...user.weightManagement,
-            {
-              date: new Date(weightData.date),
-              weight: parseFloat(weightData.weight),
-              bmi: parseFloat(weightData.bmi),
-              bodyFatPercentage: parseFloat(weightData.bodyFatPercentage),
-              measurements: {
-                waist: parseFloat(weightData.measurements.waist),
-                chest: parseFloat(weightData.measurements.chest),
-                hips: parseFloat(weightData.measurements.hips),
+      const response = await fetch(
+        `${VITE_BACKEND_URL}/user/update/${user._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            weightManagement: [
+              ...user.weightManagement,
+              {
+                date: new Date(weightData.date),
+                weight: parseFloat(weightData.weight),
+                bmi: parseFloat(weightData.bmi),
+                bodyFatPercentage: parseFloat(weightData.bodyFatPercentage),
+                measurements: {
+                  waist: parseFloat(weightData.measurements.waist),
+                  chest: parseFloat(weightData.measurements.chest),
+                  hips: parseFloat(weightData.measurements.hips),
+                },
               },
-            },
-          ],
-        }),
-      }).then((res) => res.json());
+            ],
+          }),
+        }
+      ).then((res) => res.json());
 
       const updatedUser = await response;
       setUser(updatedUser.data);

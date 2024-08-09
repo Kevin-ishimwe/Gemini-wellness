@@ -5,11 +5,11 @@ import { FaEye } from "react-icons/fa";
 import G_auth_Btn from "../components/G_auth_Btn";
 import Success from "../components/notification/Success";
 
-const backend_url = import.meta.env.BACKEND_URL;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function Signup() {
   const [islogin, setislogin] = useState(false);
-    const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const password = useRef();
   const passwordConfirm = useRef();
   const [form, setForm] = useState({
@@ -32,7 +32,7 @@ function Signup() {
       return;
     }
     try {
-      const response = await fetch(`${backend_url}user/add`, {
+      const response = await fetch(`${VITE_BACKEND_URL}user/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function Signup() {
       }
     } catch (error) {
       console.error("Sign up error:", error);
-       setError("An error occurred during sign up");
+      setError("An error occurred during sign up");
     }
   };
 
