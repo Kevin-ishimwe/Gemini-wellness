@@ -69,8 +69,8 @@ function AudioLevelMeter() {
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
   const silenceTimerRef = useRef(null);
-  const SILENCE_THRESHOLD= useRef(isSafari ? 0.65 : 1.2);
-  const SILENCE_DURATION = useRef( 1000); // 1 second in milliseconds
+  const SILENCE_THRESHOLD= useRef(isSafari ? 0.65 : 0.9);
+  const SILENCE_DURATION = useRef( 1500); // 1 second in milliseconds
   console.log(isSafari, SILENCE_DURATION.current, SILENCE_THRESHOLD.current);
   const handleGenerativeResponseVoice = async (response) => {
     const textChunks = response.trim().replace("\n", "").split(".");

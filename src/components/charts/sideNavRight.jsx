@@ -7,8 +7,8 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 function SideNavRight({ title, prompt_data = null, main = null }) {
   const [healthAnalysis, setHealthAnalysis] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
+  const [contextAnalysis, setcontextAnalysis] = useState([]);
   const [inputText, setInputText] = useState("");
-
   useEffect(() => {
     if (prompt_data && main == null) {
       try {
@@ -25,20 +25,27 @@ function SideNavRight({ title, prompt_data = null, main = null }) {
               data.data.replace("```json", "").replace("```", "")
             );
             setHealthAnalysis(clean);
-            setChatHistory([
+            setcontextAnalysis([
               {
                 role: "user",
                 parts: [
                   {
                     text:
-                      "Hello, analyze my data and put result in json" +
-                      prompt_data,
+                      `more context data :${localStorage.getItem("user_data")}
+                       analyse this specific health data and answer questions, ill ask later?` +
+                      JSON.stringify(prompt_data),
                   },
                 ],
               },
               {
                 role: "model",
-                parts: [{ text: "sure here you go" + data }],
+                parts: [
+                  {
+                    text:
+                      "understood heres my analysis, ask more questions if necessary!" +
+                      JSON.stringify(clean),
+                  },
+                ],
               },
             ]);
           });
@@ -59,7 +66,7 @@ function SideNavRight({ title, prompt_data = null, main = null }) {
         },
         body: JSON.stringify({
           prompt: message,
-          history: chatHistory,
+          history: contextAnalysis,
         }),
       });
 

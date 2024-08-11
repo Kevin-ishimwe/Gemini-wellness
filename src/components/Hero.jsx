@@ -2,7 +2,7 @@ import lady_phone from "../assets/lady_phone.jpg";
 import computer_hero from "../assets/computer_hero.svg";
 import dude_phone from "../assets/dude_phone.jpg";
 import vwaves from "../assets/Vectorwave.svg";
-
+import { NavLink } from "react-router-dom";
 const Hero = () => {
   return (
     <div className="py-[5em] min-h-screen lg:px-8 lg:p-20 relative">
@@ -14,6 +14,12 @@ const Hero = () => {
           <p className=" mb-8 mt-4 font-PoppinsLight text-xl text-center lg:text-left">
             Your mental, physical, and emotional health matters.
           </p>
+          <NavLink
+            to={"/login"}
+            className=" mt-4  lg:mt-0 bg-indigo-600 text-white py-4 px-8 rounded-full hover:bg-indigo-800 border-2 border-indigo-600 text-xl"
+          >
+            get started
+          </NavLink>
         </div>
         <div>
           <div className="flex my-12 items-center">

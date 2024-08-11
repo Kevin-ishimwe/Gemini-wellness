@@ -207,7 +207,7 @@ function Medications() {
       )}
       <SideNavRight
         title={"Medication Management Report"}
-        prompt_data={medications}
+        prompt_data={user?.medications}
       />
     </div>
   );

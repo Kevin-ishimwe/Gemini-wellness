@@ -2,7 +2,7 @@ import vwaves from "../assets/Vectorwave.svg";
 import Hero from "../components/Hero";
 import Faqs from "../components/Faqs";
 import WhyGemini from "../components/Why";
-
+import { NavLink } from "react-router-dom";
 const SubHero = () => {
   return (
     <div className="relative z-[10] ">
@@ -91,6 +91,7 @@ function Home() {
     <>
       <Hero />
       <SubHero />
+    
       <Faqs />
       <WhyGemini />
     </>

@@ -245,7 +245,7 @@ function GoalsManagement() {
           </div>
         </div>
       )}
-      <SideNavRight title={"Goals Management Report"} prompt_data={goals} />
+      <SideNavRight title={"Goals Management Report"} prompt_data={user?.goals} />
     </div>
   );
 }
