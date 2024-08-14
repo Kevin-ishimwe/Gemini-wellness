@@ -1,15 +1,15 @@
 import Logo_max from "./Logo-max";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate } from "react-router-dom";
 import { HiMiniBars3 } from "react-icons/hi2";
 import { RxCross1 } from "react-icons/rx";
 import { FaUserCircle } from "react-icons/fa";
 import { FaUser, FaComments, FaMicrophone, FaHeartbeat } from "react-icons/fa";
-
 import { useEffect, useState } from "react";
 function Nav() {
   const [menu, setmenu] = useState(false);
   const [user, setuser] = useState(false);
   const [controllerprofile, setcontrollerprofile] = useState(false);
+  const location =useNavigate()
 
   const links = [
     { text: "Home", link: "/home" },
@@ -44,7 +44,7 @@ function Nav() {
       name: "Health Tracker",
       href: "/health",
       icon: <FaHeartbeat className="text-2xl mr-4 " />,
-    },
+    }
   ];
   return (
     <>
@@ -81,6 +81,12 @@ function Nav() {
                         {link.name}
                       </NavLink>
                     ))}
+                    <button className="bg-indigo-800 hover:bg-indigo-950 p-2 my-4 mx-2 text-white rounded-full" onClick={()=>{
+                      localStorage.removeItem("user_data")
+                      localStorage.removeItem("user_token");
+                      window.location.href('/')
+
+                    }}>logout</button>
                   </div>
                 ) : (
                   <></>

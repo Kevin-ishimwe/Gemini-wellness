@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import AudioVisualizer from "./AudioVisualizer";
 import { FaMicrophone } from "react-icons/fa";
-
+import TutorialAudio from "./TutorialAudio";
 
 const key1 = import.meta.env.VITE_OPENAI_API_KEY;
 const backend_url = import.meta.env.VITE_BACKEND_URL;
@@ -57,6 +57,7 @@ const safariCheck = () =>
       (typeof safari !== "undefined" && window["safari"].pushNotification)
   );
 function AudioLevelMeter() {
+  const [err, seterr] = useState(null);
   const [isActive, setisActive] = useState(true);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
@@ -69,12 +70,10 @@ function AudioLevelMeter() {
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
   const silenceTimerRef = useRef(null);
-  const SILENCE_THRESHOLD= useRef(isSafari ? 0.65 : 0.9);
-  const SILENCE_DURATION = useRef( 1500); // 1 second in milliseconds
-  console.log(isSafari, SILENCE_DURATION.current, SILENCE_THRESHOLD.current);
+  const SILENCE_THRESHOLD = useRef(isSafari ? 0.65 : 0.95);
+  const SILENCE_DURATION = useRef(1500); // 1 second in milliseconds
   const handleGenerativeResponseVoice = async (response) => {
     const textChunks = response.trim().replace("\n", "").split(".");
-    console.log("#############", textChunks);
     const playAudioChunks = async (chunks, index = 0) => {
       if (index >= chunks.length) return setIsSpeaking(false);
       setIsSpeaking(true);
@@ -167,7 +166,9 @@ function AudioLevelMeter() {
             };
           }
         })
-        .catch((err) => console.error("Error accessing microphone:", err));
+        .catch((err) =>
+          seterr("<strong>Error accessing microphone:</strong></br>" + err)
+        );
       if (!isActive) {
         audioContextRef.current.close();
         return mediaRecorderRef.current.stream.getTracks().forEach((track) => {
@@ -176,8 +177,8 @@ function AudioLevelMeter() {
         });
       }
     } catch (error) {
-      console.log(error);
-    }
+      seterr(JSON.stringify(error));
+    } 
   }, [isActive]);
 
   const measureAudioLevel = () => {
@@ -219,10 +220,10 @@ function AudioLevelMeter() {
   }, [isRecording, isSpeaking]);
 
   const handleGeminiText = async (audioBlob) => {
-    setIsTranscribing(true);
-    setisActive(false);
-    const transcription = await handleTranscription(audioBlob);
     try {
+      setIsTranscribing(true);
+      setisActive(false);
+      const transcription = await handleTranscription(audioBlob);
       const chatResponse = await fetch(`${backend_url}/conversation/chat`, {
         method: "POST",
         headers: {
@@ -244,7 +245,7 @@ function AudioLevelMeter() {
         handleGenerativeResponseVoice(res.response);
       }
     } catch (error) {
-      console.error("Error during transcription:", error);
+      seterr("Error during transcription:" + error);
       setIsTranscribing(false);
     }
   };
@@ -255,6 +256,13 @@ function AudioLevelMeter() {
         className={` bg-red-300 h-[.4em] mx-auto my-4 rounded-full linear-bg`}
         style={{ width: `${14 * audioLevel.toFixed(2) + 1}em` }}
       ></p>
+      <TutorialAudio safari={isSafari} />
+      <div className="fixed top-[20vh] left-0 w-screen text-red-400">
+        <p
+          dangerouslySetInnerHTML={{ __html: err }}
+          className="text-center"
+        ></p>
+      </div>
       <AudioVisualizer
         aiVoice={isSpeaking}
         fetching={isTranscribing}

@@ -75,7 +75,7 @@ p {
 @keyframes happear {
   from {
     opacity: 0;
-   scale: 0;
+    scale: 0;
   }
   to {
     scale: 1;
@@ -110,4 +110,47 @@ a:hover {
 .text-overlay-container:hover .overlay-text {
   opacity: 1; /* Fully visible on hover */
   transform: translateY(0); /* Slide to its original position */
+}
+
+
+/* Chrome logo colors */
+.gradient-chrome {
+
+  background-image: linear-gradient(
+    45deg,
+    #ea4335 25%,
+    /* Red */ #4285f4 25%,
+    /* Blue */ #4285f4 50%,
+    #34a853 50%,
+    /* Green */ #34a853 75%,
+    #fbbc05 75% /* Yellow */
+  );
+}
+
+/* Firefox logo colors */
+.gradient-firefox {
+  background-image: linear-gradient(
+    45deg,
+    #ff9400 15%,
+    /* Orange */ #ff4e00 15%,
+    /* Darker Orange */ #ff4e00 30%,
+    #ff0039 30%,
+    /* Red */ #ff0039 45%,
+    #b833e1 45%,
+    /* Purple */ #b833e1 60%,
+    #0a84ff 60% /* Blue */
+  );
+}
+
+/* Edge logo colors */
+.gradient-edge {
+  background-image: linear-gradient(
+    45deg,
+    #0078d7 30%,
+    /* Blue */ #28a8ea 30%,
+    /* Light Blue */ #28a8ea 60%,
+    #14539a 60%,
+    /* Dark Blue */ #14539a 90%,
+    #0078d7 90% /* Blue */
+  );
 }
